@@ -1,0 +1,467 @@
+{% assign products_per_page = 200 %}
+{% if section.settings.show-featured-product  %}
+  {% assign products_per_page = products_per_page | plus: 1 %}
+{% endif %}
+{% paginate collection.products by products_per_page %}
+
+{% assign products_per_row = section.settings.products-per-row-range %}
+{% assign column_width = 12 | divided_by: products_per_row %}
+
+{% assign show_title = false %}
+{% if collection.title.size > 0 %}
+  {% assign show_title = true %}
+{% endif %}
+
+{% assign show_featured_image = false %}
+{% if section.settings.show-featured-image and collection.image %}
+  {% assign show_featured_image = true %}
+{% endif %}
+
+{% assign show_description = false %}
+{% if collection.description.size > 0 %}
+  {% assign show_description = true %}
+{% endif %}
+
+{% unless collection.metafields.banner.collection == blank %}
+
+<div class="collectionimage">
+<img src="{{ collection.metafields.banner.collection }}" />
+</div>
+
+{% endunless %}
+
+{% unless collection.metafields.meta.bannerimage  == blank %} 
+<section class="fw--blocks coming-collection">
+  <img class="bg-coming" src="{{ collection.metafields.meta.bannerimage }}" alt="bg-437" />
+  <div class="row--block-coming">
+    <div class="sign_form width--12 width--medium-6 width--large-6">
+      <h2>Collection name</h2>
+      <p>Text about coming soon, launch details,<br>placeholder copy</p>
+      <form class="join_waitlist">
+        <input type="email" placeholder="Email" />
+        <button type="submit">Join Waitlist</button>
+      </form>
+    </div>
+    <div class="count_coming width--12 width--medium-6 width--large-6">
+      <h4>Launching In:</h4>
+      <div class="count_timer">
+        <div id="timer">
+          <div id="days"></div>
+          <div id="hours"></div>
+          <div id="minutes"></div>
+          <div id="seconds"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endunless %}
+
+<div data-section-id="{{ section.id }}" data-section-type="collection_page" data-js-class="CollectionPage">
+
+  {% if show_title or show_featured_image or show_description %}
+    <header class="text-align--center">
+      {% if show_featured_image %}
+        <div class="image-title-wrapper">
+          <div class="featured-image">
+            {%
+              include "framework--image",
+              image: collection.image,
+              full_width: true
+            %}
+          </div>
+
+          {% if show_title %}
+          <h1 class="page-title with-image font--heading fw--align--center-y">{{ collection.title }}</h1>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      <div class="spacer spacing--3y show--medium-large"></div>
+    </header>
+
+
+
+  <div class="cartcontainer">
+
+        <h1 class="page-title font--heading">{{ collection.title }}</h1>
+
+      {% if show_description %}
+        <div class="description text-align--center spacing--4y font--size-4 wide">
+          {{ collection.description }}
+        </div>
+      {% endif %}
+
+    <div class="showfilters">Show filters</div>
+        <div class="hidefilters">Hide filters</div>
+    <div class="filtersmain">
+      <ul class="clearfix filters" style="display:flex; justify-content:center;">
+
+    <li class="clearfix filter">
+      <label>Sort By</label>
+      <select class="sort-by-filter">
+        <option value="">-</option>
+        <option value="price-ascending" {% if collection.sort_by == "price-ascending" %}selected{% endif %}>Price, low to high</option>
+        <option value="price-descending" {% if collection.sort_by == "price-descending" %}selected{% endif %}>Price, high to low</option>
+         <option value="title-ascending" {% if collection.sort_by == "title-ascending" %}selected{% endif %}>A-Z</option>
+         <option value="title-descending" {% if collection.sort_by == "title-descending" %}selected{% endif %}>Z-A</option>
+
+     </select>
+    </li>
+    {% unless collection.handle contains 'red' or collection.handle contains 'candy' %}
+    <li class="clearfix filter">
+      {% assign tags = section.settings.color_filter_tags %}
+      {% assign color_tags = tags | split: ',' %}
+      <label>Color</label>
+      <select class="coll-filter">
+        <option value="">All</option>
+        {% for t in color_tags %}
+          {% assign tag = t | strip | upcase %}
+          {% assign current_tags_str = current_tags | join: ', ' | upcase %}
+          <option value="{{ tag | handle }}" {% if current_tags_str contains tag %}selected{% endif %}>{{ tag }}</option>
+        {% endfor %}
+      </select>
+    </li>
+      {% endunless %}
+          {% unless collection.handle contains 'red' or collection.handle contains 'candy' %}
+    <li class="clearfix filter">
+      {% assign tags = section.settings.fabric_filter_tags %}
+      {% assign fabric_tags = tags | split: ',' %}
+
+      <label>Fabric</label>
+      <select class="coll-filter">
+        <option value="">All</option>
+        {% for t in fabric_tags %}
+          {% assign tag = t | strip | upcase %}
+          {% assign current_tags_str = current_tags | join: ', ' | upcase %}
+          <option value="{{ tag | handle }}" {% if current_tags_str contains tag %}selected{% endif %}>{{ tag }}</option>
+        {% endfor %}
+      </select>
+    </li>
+
+    {% endunless %}
+    {% unless collection.handle contains 'tops' or collection.handle contains 'bottoms' or collection.handle contains 'one-pieces' %}
+    <li class="clearfix filter">
+      {% assign tags = section.settings.type_filter_tags %}
+      {% assign type_tags = tags | split: ',' %}
+      <label>Type</label>
+      <select class="coll-filter">
+        <option value="">All</option>
+        {% for t in type_tags %}
+          {% assign tag = t | strip | upcase %}
+          {% assign current_tags_str = current_tags | join: ', ' | upcase %}
+          <option value="{{ tag | handle }}" {% if current_tags_str contains tag %}selected{% endif %}>{{ tag }}</option>
+        {% endfor %}
+      </select>
+    </li>
+    {% endunless %}
+   <li class="clearfix filter">
+     {% assign collection_tags = section.settings.collection_filter_tags %}
+     {% assign tags = collection_tags | split: ',' %}
+     <label>Style</label>
+      <select class="coll-filter">
+        <option value="">All</option>
+        {% for t in tags %}
+          {% assign tag = t | strip | upcase %}
+          {% assign current_tags_str = current_tags | join: ', ' | upcase %}
+          <option value="{{ tag | handle }}" {% if current_tags_str contains tag %}selected{% endif %}>{{ tag }}</option>
+        {% endfor %}
+      </select>
+    </li>
+  </ul>
+    </div>
+{% comment %} END OF CUSTOM FILTERS  {% endcomment %}
+
+
+  {% endif %}
+  </div>
+
+
+
+
+  {% if collection.products.size < 1  %}
+    <div class="no-product text-align--center colored-links">
+      {{ 'collections.no_products_feedback_html' | t }}
+    </div>
+
+    <section class="product-grid layout-type--grid fw--blocks clear-after--medium-3 clear-after--large-3">
+
+    </section> <!-- .product-grid -->
+
+  {% endif %}
+
+
+  <div class="">
+
+    <section class="product-grid layout-type--grid fw--blocks clear-after--medium-3 clear-after--large-{{ products_per_row }} AjaxinateLoop">
+      {% assign row_count = 0 %}
+      {% for product in collection.products %}
+        {% assign view_type = 'grid' %}
+
+        {% comment %} Added by Craig R - July 17, 2019 {% endcomment %}
+      	{% assign p_title = product.title | downcase %}
+
+        {% if p_title contains 'scrunchie' %}
+          {% continue %}
+        {% else %}
+          <div class="block width--6 width--medium-4 width--large-{{ column_width }} spacing--3x">
+            {% include 'partial--product' with 'grid' %}
+          </div>
+
+        {% endif %}
+
+
+      {% endfor %}
+    </section>
+
+
+
+  </div>
+
+  {% endpaginate %}
+
+</div>
+
+{% comment %} JAVSCRIPT FOR CUSTOM FILTERS  {% endcomment %}
+
+<script>
+  Shopify.queryParams = {};
+  if (location.search.length) {
+    for (var aKeyValue, i = 0, aCouples = location.search.substr(1).split('&'); i < aCouples.length; i++) {
+      aKeyValue = aCouples[i].split('=');
+      if (aKeyValue.length > 1) {
+        Shopify.queryParams[decodeURIComponent(aKeyValue[0])] = decodeURIComponent(aKeyValue[1]);
+      }
+    }
+  }
+  jQuery('.coll-picker').change(function() {
+    if (jQuery(this).val()) {
+      location.href = '/collections/' + jQuery(this).val();
+    }
+    else {
+      location.href = '/collections/all';
+    }
+  });
+  var collFilters = jQuery('.coll-filter');
+  collFilters.change(function() {
+    delete Shopify.queryParams.page;
+    var newTags = [];
+    collFilters.each(function() {
+      if (jQuery(this).val()) {
+        newTags.push(jQuery(this).val());
+      }
+    });
+    {% if collection.handle %}
+    var newURL = '/collections/{{ collection.handle }}';
+    if (newTags.length) {
+      newURL += '/' + newTags.join('+');
+    }
+    var search = jQuery.param(Shopify.queryParams);
+    if (search.length) {
+      newURL += '?' + search;
+    }
+    location.href = newURL;
+    {% else %}
+    if (newTags.length) {
+      Shopify.queryParams.constraint = newTags.join('+');
+    }
+    else {
+      delete Shopify.queryParams.constraint;
+    }
+    location.search = jQuery.param(Shopify.queryParams);
+    {% endif %}
+  });
+</script>
+
+
+
+
+<style>
+  .filters { list-style-type: none; }
+  .filter { float: left; margin-right: 15px; }
+  .filter label { display: block; margin: 10px 0; }
+.no-product.text-align--center.colored-links {display: none;}
+</style>
+
+{% comment %} END OF JAVASCRIPT FOR CUSTOM FILTERS {% endcomment %}
+
+{% comment %} Added by Craig R - Resizs collection images to prevent blank spaces on mobile {% endcomment %}
+<script>
+
+  function throttled(delay, fn) {
+    let lastCall = 0;
+    return function (...args) {
+      const now = (new Date).getTime();
+      if (now - lastCall < delay) {
+        return;
+      }
+      lastCall = now;
+      return fn(...args);
+    }
+  }
+
+  function captionResize(checkscroll = false){
+    let captions = document.querySelectorAll('.partial--product');
+
+    if (window.matchMedia("(max-width: 767px)").matches && captions.length > 0) {
+      let first_height = captions[0].offsetHeight;
+      let run_resize = false;
+      if (checkscroll === true) {
+        for (let ii=1; ii< captions.length; ii++){
+          if (first_height != captions[ii].offsetHeight) {
+            run_resize = true;
+            console.log(run_resize);
+            ii = captions.length;
+          };
+        };
+      } else {
+        run_resize = true;
+      };
+
+      if (run_resize === true){
+        let caption_height = 0;
+
+        captions.forEach(caption => {
+          caption.style.height = "auto";
+          caption.style.minHeight = "unset";
+        });
+
+        captions.forEach(caption => {
+          if (caption.offsetHeight > caption_height) {
+            caption_height = caption.offsetHeight;
+          };
+        });
+
+        captions.forEach(caption => {
+          caption.style.minHeight = `${caption_height + 20}px`;
+        });
+      };
+    } else if (window.matchMedia("(min-width: 768px)").matches && captions.length > 0) {
+      captions.forEach(caption => {
+        caption.style.height = "unset";
+        caption.style.minHeight = "unset";
+      });
+    };
+  };
+
+  captionResize();
+  const throttledResize = throttled(200, () => captionResize());
+  window.addEventListener('resize', throttledResize);
+  const throttledResizeScroll = throttled(200, () => captionResize(true));
+  window.addEventListener('scroll', throttledResizeScroll);
+
+  
+  function makeTimer() {
+
+	//		var endTime = new Date("29 April 2018 9:56:00 GMT+01:00");	
+		var endTime = new Date("{{ collection.metafields.meta.countdown }}");			
+			endTime = (Date.parse(endTime) / 1000);
+
+			var now = new Date();
+			now = (Date.parse(now) / 1000);
+
+			var timeLeft = endTime - now;
+
+			var days = Math.floor(timeLeft / 86400); 
+			var hours = Math.floor((timeLeft - (days * 86400)) / 3600);
+			var minutes = Math.floor((timeLeft - (days * 86400) - (hours * 3600 )) / 60);
+			var seconds = Math.floor((timeLeft - (days * 86400) - (hours * 3600) - (minutes * 60)));
+  
+			if (hours < "10") { hours = "0" + hours; }
+			if (minutes < "10") { minutes = "0" + minutes; }
+			if (seconds < "10") { seconds = "0" + seconds; }
+
+			$("#days").html(days + "<span>Days</span>");
+			$("#hours").html(hours + "<span>Hours</span>");
+			$("#minutes").html(minutes + "<span>Minutes</span>");
+			$("#seconds").html(seconds + "<span>Seconds</span>");		
+
+	}
+
+	setInterval(function() { makeTimer(); }, 1000);
+</script>
+
+
+{% schema %}
+{
+  "name": "Collection page",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show-featured-image",
+      "label": "Show collection image",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show-vendor",
+      "label": "Show product's vendor name",
+      "default": false,
+      "info": "e.g. Apple, Shopify"
+    },
+    {
+      "label": "Products per row",
+      "id": "products-per-row-range",
+      "type": "range",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "header",
+      "content": "Filters"
+    },
+    {
+      "type": "text",
+      "id": "color_filter_tags",
+      "label": "Color filter tags",
+	  "info": "Seperate tags with a comma (ex. 'Red, Black, Yellow, White...')"
+    },
+    {
+      "type": "text",
+      "id": "fabric_filter_tags",
+      "label": "Fabric filter tags",
+	  "info": "Seperate tags with a comma (ex. 'Red, Black, Yellow, White...')"
+    },
+    {
+      "type": "text",
+      "id": "type_filter_tags",
+      "label": "Type filter tags",
+	  "info": "Seperate tags with a comma (ex. 'Tops, Bottoms, One-piece...')"
+    },
+    {
+      "type": "text",
+      "id": "collection_filter_tags",
+      "label": "Collection filter tags",
+	  "info": "Seperate tags with a comma (ex. 'Roy, Kenzie, Sanders...')"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  footer {
+    /* padding-top: 100px !important; */
+    padding-bottom: 130px !important;
+}
+
+  .cartcontainer {
+    z-index:99999999999999999999999999999999;
+  }
+
+    @media only screen and (max-width: 767px) {
+
+
+        footer {
+    /* padding-top: 100px !important; */
+    padding-bottom: 100px !important;
+}
+
+
+  }
+html .template--collection .layout--main-content {
+    padding-top: 75px !important;
+}
+ 
+</style>

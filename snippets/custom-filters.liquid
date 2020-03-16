@@ -1,0 +1,51 @@
+  {% comment %} ADD IN CUSTOM FILTERS {% endcomment %} 
+  
+<ul class="clearfix filters" style="display:flex; justify-content:center; max-width: 400px;">
+  
+  <li class="clearfix filter">
+    {% assign tags = 'BLACK, BLUSH, CYAN, ROSE, WHITE, YELLOW, STONE, NEGRONI, CANDY, RED' | split: ',' %}
+    <label>Color</label>
+    <select class="coll-filter">
+      <option value="">All</option>
+      {% for t in tags %}
+      {% assign tag = t | strip %}
+      {% if current_tags contains tag %}
+      <option value="{{ tag | handle }}" selected>{{ tag }}</option>
+      {% elsif collection.all_tags contains tag %}
+      <option value="{{ tag | handle }}">{{ tag }}</option>
+      {% endif %}
+      {% endfor %}
+    </select>
+  </li>
+  <li class="clearfix filter">
+    {% assign tags = 'BOTTOMS, TOPS, ONE PIECE' | split: ',' %}
+    <label>Type</label>
+    <select class="coll-filter">
+      <option value="">All</option>
+      {% for t in tags %}
+      {% assign tag = t | strip %}
+      {% if current_tags contains tag %}
+      <option value="{{ tag | handle }}" selected>{{ tag }}</option>
+      {% elsif collection.all_tags contains tag %}
+      <option value="{{ tag | handle }}">{{ tag }}</option>
+      {% endif %}
+      {% endfor %}
+    </select>
+  </li>
+ <li class="clearfix filter">
+    {% assign tags = 'KENZIE, ROY, SANDERS, ROBYN, AUBREY, HARLOW, JOHNSON, LANEZ, WILLIAMS, BEST SELLERS' | split: ',' %}
+    <label>Collection</label>
+    <select class="coll-filter">
+      <option value="">All</option>
+      {% for t in tags %}
+      {% assign tag = t | strip %}
+      {% if current_tags contains tag %}
+      <option value="{{ tag | handle }}" selected>{{ tag }}</option>
+      {% elsif collection.all_tags contains tag %}
+      <option value="{{ tag | handle }}">{{ tag }}</option>
+      {% endif %}
+      {% endfor %}
+    </select>
+  </li>
+</ul>
+  {% comment %} END OF CUSTOM FILTERS  {% endcomment %} 

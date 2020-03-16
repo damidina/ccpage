@@ -1,0 +1,712 @@
+<script>
+  $(document).ready(function(){
+$('.vrint').change(function(){ 
+    var abc = $(this).val();
+ $(this).attr({value:abc});
+
+ 
+});
+
+ $('.add_bag').click(function(){
+
+   $('.loading').css({'display':'flex'});
+  setTimeout(function(){
+       $('.loading').css({'display':'none'});
+   }, 2000);
+var aa =$(this).parent().find('.vrint').val();
+jQuery.post('/cart/add.js', {
+  items: [
+    {
+      quantity: 1,
+      id: aa
+     }
+]
+});
+   setTimeout(function() {
+
+     theme.partials.Cart.renderCart();
+
+   }, 1000);
+});
+
+
+  });
+</script>
+<div class="modal cart-link" data-js-class="FrameworkModal">
+<a tabindex="0" class="toggle {% if settings.cart--type == 'modal' %}modal--link{% endif %}" href="#">       
+  <span class="ico-cart">
+  	<img src="https://cdn.shopify.com/s/files/1/2112/6981/t/50/assets/cart-icon.png?v=1583441174"/>
+    {% if cart.item_count > 0 %}
+    <span class="count no-bracket">{{ cart.item_count }}</span>
+    {% endif %}
+  </span>
+
+    {{ 'cart.title' | t }} 
+  <span class="count">{% if cart.item_count > 0 %}({{ cart.item_count }}){% endif %}</span> </a>
+  <div class="fw--cart modal--content spacing--4" data-js-class="Cart">
+    <div class="content fw--blocks cart-content-free not-free adding-free">
+      <div class="loading">
+      	<img src="//cdn.shopify.com/s/files/1/2112/6981/t/50/assets/loading.gif?v=1583461201" alt="loader" />
+        <span class="label-cart"><b>Adding your free gift</b></span>
+      </div>
+      <div class="intro text-center">
+     	<h2>GIFT A SUIT, ON US.</h2>
+      	<p>This International Women’s Day, we’re giving you a free suit to give to an inspirational woman in your life. </p> 
+      </div>
+    <div class="cartlisting_free">  
+    {% for product in collections.iwd.products limit:1 %}
+    
+     <div class="variant-id last-variant-block width--12" data-variant-id="13681330061354">
+        <div class="container-cart">
+            <div class="image-cart">
+                 {% assign image = product.images[0] %}
+                  <a href="{{ product.url | within: collection  }}" title="{{ product.title }}">
+                    {% include "framework--image", image: image, max_height: 450 %}
+                  </a>
+            </div>
+            <div class="rightside">
+              <div class="cart-title customname-prod"><a href="{{ product.url | within: collection  }}">{{ product.title }}</a></div>
+  
+              <span class="actual-price money"><strong>FREE</strong></span>
+              <div class="free-act">
+                 
+           <select name="varint" id="vrint" class="vrint" value="{{ product.variants.first.id }}"> 
+              {% for variant in product.variants %}
+                {% if variant.available %}
+                <option value= "{{ variant.id }}"> {{ variant.title }}  </option>
+                {% endif %} 
+                {% endfor %}
+                </select> 
+
+
+                <a href="#"  class="add_bag">Add to bag</a>
+              </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+      </div>
+<!--       <span id="free_more">See more free options</span> -->
+      </div>
+   
+    <p class="notification--empty spacing--3">{{ 'cart.empty_html' | t }}</p>
+
+    <form action="/cart" method="post" novalidate="" class="">
+<div class="countdownclock">Checkout within the next 
+<span id="countdownitem">0:26</span> so we don't run out of stock
+  </div>
+    
+  
+
+     <div id="link-products2" class="hide-after-select">
+    </div>
+
+  
+      <div class="content fw--blocks cart-content"></div>
+
+      <div class="spacer spacing--3y"></div>
+      <div class="fw--blocks">
+
+
+        <div class="width--large-12">
+          <p class="text-align--center text-align--large-left">{{ 'cart.shipping_taxes_notification' | t}}</p>
+          <div class="spacer spacing--2y"></div>
+          
+          <div class="append-checkbox">
+          <div class="showcheckbox"><label><input type="checkbox" id="nopackaging" autocomplete="off">Less packaging</label>
+            <p>Already have our luxe packaging? Click here to receive your order with limited packaging to help decrease your environmental footprint.</p>
+          
+          </div></div>
+
+          <div class="fw--blocks spacing--3 compact--3x list text-align--center text-align--large-left">
+            <div><a class="continue-shopping text--underline text--uppercase" href="#">{{ 'cart.continue' | t }}</a></div>
+<!--             <div class="test fixedbottom"><button class="button checkout" type="submit" name="checkout">{{ 'cart.checkout' | t }}</button></div>
+ -->
+            {% if additional_checkout_buttons %}
+            {% comment %}
+              <br />
+              <div class="additional-checkout-buttons">
+                {{ content_for_additional_checkout_buttons }}
+              </div>{% endcomment %}
+            {% endif %}
+
+          </div>
+        </div>
+		
+      </div>
+	  {% assign my_cart_total = cart.total_price | divided_by: 100 %}
+ 
+    </form>
+  </div>
+
+</div>
+
+<script>
+// document.getElementById('countdownitem').innerHTML =
+//   005 + ":" + 0;
+// startTimer();
+
+// function startTimer() {
+//   var presentTime = document.getElementById('countdownitem').innerHTML;
+//   var timeArray = presentTime.split(/[:]+/);
+//   var m = timeArray[0];
+//   var s = checkSecond((timeArray[1] - 1));
+//   if(s==59){m=m-1}
+//   //if(m<0){alert('timer completed')}
+  
+//   GetCartValue();
+  
+//   loadCartQuery();
+  
+//   document.getElementById('countdownitem').innerHTML =
+//     m + ":" + s;
+
+//   setTimeout(startTimer, 1000);
+// }
+
+function checkSecond(sec) {
+  if (sec < 10 && sec >= 0) {sec = "0" + sec}; // add zero in front of numbers < 10
+  if (sec < 0) {sec = "59"};
+  return sec;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+$(document).ready(function() 
+{
+  $("#nopackaging").prop("checked")== false;
+ 
+// 	GetCartValue();
+
+	
+});	
+  
+   function showFreeProducts(cartItems){
+
+   var classhide = 'customdiv';
+	$.ajax({ type : "GET" , url : window.location.origin + "/collections/boxingday/products.json" , data: { page : 1 , limit : 2 , format : "json" } }).done( function( data ) {
+
+	
+	 var  countp = data.products.length;
+	 <!-- console.log(data); -->
+	 <!-- console.log(countp); -->
+	 var html = '';
+	 var htm = '';
+	 var showFreeItems = true;
+	 var variantId = 0;
+	 $.each( data.products , function( key , product ) {
+		
+			for( var cz = 0; cz <  cartItems.length; cz++ )
+			{
+				if(cartItems[cz].product_id == product.id)
+				{
+// 					console.log('item already added');
+					showFreeItems = false;
+// 					var checkboxHtml = "<div class='showcheckbox'><input type='checkbox' id='nopackaging'> No packaging</div>";
+// 					$('.append-checkbox').html(checkboxHtml);
+					
+				}
+			}
+	 
+	    }); 
+		
+	 
+	 if(showFreeItems){
+       $("#esc-oos-form").hide();
+	 
+		var varinatTitle =   cartItems[0].variant_title;
+       htm += "<div class='offer-title'>Choose a free gift from us";	
+	    htm += "</div>";	
+	 	$.each( data.products , function( key , product ) {
+
+					// products.push( product ) ;
+            //////////////////////////////////////////////////////////////////////  
+				
+					is_available = false;
+                    var size_texts = '';
+				htm += "<div class='offer-product-div'>";	
+				htm += "<div class='offer-product-img'>";
+				if(product.images.length  > 0){
+                          //console.log(product);
+	                    htm += '<img alt="" src="'+  product.images[0].src +'">';
+                        }	
+			    htm += "</div>";
+				htm += "<div class='offer-product-title-info'>";
+				htm += "<span class='offer-product-title-text'>"+product.title+"</span>";
+				htm += '<select class="select custom-select" name="id" id="product-select-'+  product.id +'">';
+				//htm += '<option value="select size">select a size</option>';
+                for( var k = 0; k <  product.variants.length; k++ )
+                {
+                  var selectedOpt = '';
+                  if(  product.variants[k].available )
+                  {
+                    if(varinatTitle == product.variants[k].title ){
+                      selectedOpt = 'selected';
+                    }
+                    htm +='<option value="'+  product.variants[k].id +'"'+selectedOpt+'>'+  product.variants[k].title +'</option>';
+                  }
+                  else
+                  {
+                    htm +='<option value="'+  product.variants[k].id +'" disabled>'+  product.variants[k].title +' - Sold Out</option>';
+                  }
+                }
+	            htm += '</select>';
+				htm += "<span class='compare-pr'>$35</span>";
+//           		htm += "<span class='compare-pr'>"+product.variants[0].price+"</span>";
+				htm += "<span class='offer-pr'>FREE</span>";
+				htm += "<div class='offer-pr-button' data-id='"+product.id+"'>Pick</div>";
+				htm += "</div>";		
+				htm += "</div>";		
+			    htm += "</div>";	
+			///////////////////////////////////////////////////			
+		});	
+			 
+		$('#link-products2').html(htm);
+	 }
+	 
+	 
+	});
+
+	}
+  
+  
+
+  function hideFreeItems(){
+  	$("#link-products2").html("");
+  }
+  
+ // add product variant to cart and reload page
+      function postProduct(variant_id, quantity) {
+        return $.ajax({
+          type: 'POST',
+          url: '/cart/add.js', 
+          dataType: 'json',
+          data: 'quantity=' + quantity + '&id=' + variant_id + '&properties[_free]=true', 
+        }).done(function(data, textStatus) {
+          if (textStatus === 'success') {
+          
+//             $('.append-checkbox').html("");
+// 			postProduct();
+// 			window.location.href = '/cart/';
+           productAdded(data);
+            
+//             window.location.reload();
+
+          }
+        }).fail(function(jqXHR, textStatus) {
+          return console.log("product not added");
+        });
+      }
+  
+  
+ 
+  
+	  
+// 	  function GetCartValue() {
+//         // Code for cart countdown timer
+//         return $.ajax({
+//           type: 'GET',
+//           url: '/cart.js', 
+//           dataType: 'json',
+//           //data: 'quantity=' + quantity + '&id=' + variant_id + '&properties[_free]=true', 
+//         }).done(function(data, textStatus) {
+		
+			
+          
+//           if (textStatus === 'success') {
+//             if(!$(".cart--discount-message").length){
+//               if((data.total_price/115) >= 115){
+				
+// 					console.log("show free gift");
+// //                   showFreeProducts(data.items);
+
+//               }
+//               else{
+//                 hideFreeItems();
+//               }
+//               //window.location.href = '/cart/';
+//              // productAdded();
+            
+//             }
+//             else{
+              
+
+//                 hideFreeItems();
+               
+             
+//             }
+
+//           }
+//         }).fail(function(jqXHR, textStatus) {
+//           return console.log("product not addedasdf");
+//         });
+//       }
+	  
+	  
+	  
+	  // called when product successfully added
+      function productAdded(product) {
+        $('.no-thanks').addClass('hide');
+        $('.gift-added').removeClass('hide');
+        $('.add-free-gift').addClass('hide');
+        $('.go-to-cart').removeClass('hide'); 
+        $('.go-to-cart').on('click', function(e) {
+          e.preventDefault();
+          theme.partials.Cart.renderCart();
+          $('.modal.cart-link .modal--link').trigger('click');
+        });
+        
+        
+        
+        var product_id = product.id;
+        var url = product.url;
+        var img_url = product.featured_image.url;
+        var title = product.title;
+
+        
+//         var html = '<div class="variant-id last-variant width--12" data-variant-id="'+product_id+'">'+
+//             '<div class="container-cart">'+
+//             '<div class="image-cart">'+
+//             '<a href="'+url+'"><img src="'+img_url+'" alt="'+title+'"></a>'+
+//             '</div>'+
+//             '<div class="rightside">'+
+//             '<div class="cart-title"><a href="'+url+'">'+title+'</a></div>'+
+//             '<div class="containthing">'+
+//             '<div class="input--number">'+
+//             '<a tabindex="0" aria-label="Remove one item" class="minus">'+
+//             '<svg class="fw--icon fw--icon--minus">'+
+//             '<use xlink:href="#fw--icon--minus"></use>'+
+//             '</svg>'+
+//             '</a>'+
+//             '<input type="text" value="1" min="1" pattern="[1-9]*" autocomplete="off">'+
+//             '<a tabindex="0" aria-label="Add one item" class="plus">'+
+//             '<svg class="fw--icon fw--icon--plus">'+
+//             '<use xlink:href="#fw--icon--plus"></use>'+
+//             '</svg>'+
+//             '</a>'+
+//             '</div>'+
+//             '<div class="cart-price money">FREE</div><span class="cart--discount-message">This gift is on us!</span></div>'+
+//             '</div>'+
+//             '</div>'+
+//             '<div class="remove-cart">'+
+//             '<a aria-label="Remove this item" role="button" href="#" class="cart--remove-button remove"><img src="https://cdn.shopify.com/s/files/1/2112/6981/t/28/assets/close.png?6280"></a>'+
+//             '</div>'+
+//             '</div>'+
+//             '<div class="spacer spacing--3y show--small-medium"></div>';
+        
+        var html = '<div class="variant-id last-variant width--12" id="freeGift" data-variant-id="'+product_id+'">'+
+            '<div class="container-cart">'+
+            '<div class="image-cart">'+
+            '<a href="'+url+'"><img src="'+img_url+'" alt="'+title+'"></a>'+
+            '</div>'+
+            '<div class="rightside">'+
+            '<div class="cart-title"><a href="'+url+'">'+title+'</a></div>'+
+            '<div class="containthing">'+
+            '<div class="input--number" data-variant-id=' + item.variant_id + '>'+
+            '</div>'+
+            '<div class="cart-price money">FREE</div><span class="cart--discount-message">This gift is on us!</span></div>'+
+            '</div>'+
+            '</div>'+
+            '<div class="remove-cart" data-variant-id=' + item.variant_id + '>'+
+            '<a aria-label="Remove this item" role="button"  class="cart--remove-button remove"><img src="https://cdn.shopify.com/s/files/1/2112/6981/t/28/assets/close.png?6280"></a>'+
+            '</div>'+
+            '</div>'+
+            '<div class="spacer spacing--3y"></div>';
+        
+        $(".cart-content").prepend(html);
+        
+
+      }
+  	
+  // add a normal product after less packaging is checked
+      function productAddedbyAppend(product) {
+        $('.no-thanks').addClass('hide');
+        $('.gift-added').removeClass('hide');
+        $('.add-free-gift').addClass('hide');
+        $('.go-to-cart').removeClass('hide'); 
+        $('.go-to-cart').on('click', function(e) {
+          e.preventDefault();
+          theme.partials.Cart.renderCart();
+          $('.modal.cart-link .modal--link').trigger('click');
+        });
+        
+        
+        
+        var product_id = product.id;
+        var url = product.url;
+        var img_url = product.featured_image.url;
+        var title = product.title;
+        var price = product.price/100;
+		
+        if($("div[data-variant-id="+product_id+"]").length>0){
+          
+          var quantity = $("div[data-variant-id="+product_id+"] input").val();
+          quantity ++;
+          $("div[data-variant-id="+product_id+"] input").val(quantity);
+        }
+        else{
+          var html = '<div class="variant-id last-variant width--12" id="lessPack" data-variant-id="'+product_id+'">'+
+              '<div class="container-cart">'+
+              '<div class="image-cart">'+
+              '<a href="'+url+'"><img src="'+img_url+'" alt="'+title+'"></a>'+
+              '</div>'+
+              '<div class="rightside">'+
+              '<div class="cart-title"><a href="'+url+'">'+title+'</a></div>'+
+              '<div class="containthing">'+
+              '<div class="cart-price money special-price" data-variant-id=' + item.variant_id + '>$'+price+'</div></div>'+
+              '</div>'+
+              '</div>'+
+              '<div class="remove-cart special-remove" data-variant-id=' + item.variant_id + '>'+
+              '<a aria-label="Remove this item" role="button"  class="cart--remove-button remove"><img src="https://cdn.shopify.com/s/files/1/2112/6981/t/28/assets/close.png?6280"></a>'+
+              '</div>'+
+              '</div>'+
+              '<div class="spacer spacing--3y"></div>';
+
+
+          $(".cart-content").prepend(html);
+
+        }
+        
+        
+
+      }
+  
+  //remove product added by less packaging
+  function removeProductAddedbyAppend(product_id){
+    if($("div[data-variant-id="+product_id+"]").length>0){
+    	$("div[data-variant-id="+product_id+"]").remove();
+    }
+  }
+  
+ 
+//add free gift
+$("#link-products2").on("click", ".offer-pr-button", function() {
+  	$(".hide-after-select").hide();
+  $('.hide-after-select').addClass('hide');
+    var prodId = $(this).data('id');
+    var varinatId2 =  $('#product-select-'+prodId).val() ;
+    if(varinatId2 =='none'){ 
+      alert('please choose a product'); 
+    } else {
+      if(!$(".cart--discount-message").length){
+        console.log("Variant ID",varinatId2);
+        GetCartValue();
+        postProduct(varinatId2, 1);
+      }
+    }
+  //alert(varinatId2);
+});	
+  
+function loadCartQuery(){
+  // 	$( "#variant-id:has(.cart--discount-message) " ).children(".input--number").html("");
+  
+  var noPackaging = localStorage.getItem('nopackaging');
+//  	console.log("no packaging",noPackaging);
+  if(noPackaging == "true"){
+    $("#nopackaging").prop('checked', true);
+  }
+  else{
+  	$("#nopackaging").prop('checked', false);
+  }
+  
+
+  
+  //hide input in free gift
+  $( ".cart--discount-message" ).siblings(".input--number").html("");
+	
+  //remove free gift
+  $("#freeGift").on("click", ".cart--remove-button", function() {
+//     console.log("variant id ::: ");
+    
+    var variant_id = $("#freeGift")[0].dataset.variantId;
+//     var variant_id = $("#freeGift");
+    
+    var data =  "updates["+variant_id+"]=0";
+    console.log("variant id ---: ",data);
+    
+    
+//     $.post('/cart/update.js', data)
+    $.ajax({
+      type: 'POST',
+      url: '/cart/update.js', 
+      dataType: 'json',
+      data: "updates["+variant_id+"]=0", 
+    })
+    .done(function(res){
+    	$("#freeGift").remove();
+    })
+    .fail(function(err){
+    	console.log(err);
+    });
+  });	
+  
+  // remove the product added by less packaging
+  $("#lessPack").on("click", ".cart--remove-button", function() {
+    
+    
+    
+    var variant_id = $("#lessPack")[0].dataset.variantId;
+//     var variant_id = $("#freeGift");
+    
+    var data =  "updates["+variant_id+"]=0";
+    
+    
+    
+//     $.post('/cart/update.js', data)
+    $.ajax({
+      type: 'POST',
+      url: '/cart/update.js', 
+      dataType: 'json',
+      data: "updates["+variant_id+"]=0", 
+    })
+    .done(function(res){
+    	$("#lessPack").remove();
+        localStorage.setItem('nopackaging', false);
+    })
+    .fail(function(err){
+    	console.log(err);
+    });
+  });		
+  
+  // increase quantity in the proudct added by less packaging
+  $("#lessPack").on("click", ".plus", function() {
+    
+    var variant_id = $("#lessPack")[0].dataset.variantId;
+    var quantity = $("#lessPack input").val();
+//     var variant_id = $("#freeGift");
+    
+    var data =  "updates["+variant_id+"]="+quantity;
+
+    quantity ++;
+    
+//     $.post('/cart/update.js', data)
+    $.ajax({
+      type: 'POST',
+      url: '/cart/update.js', 
+      dataType: 'json',
+      data: "updates["+variant_id+"]="+quantity, 
+    })
+    .done(function(res){
+    	$("#lessPack input").val(quantity);
+    })
+    .fail(function(err){
+    	console.log(err);
+    });
+  });
+  
+  
+  // decrease quantity in the product added by less packaging
+  $("#lessPack").on("click", ".minus", function() {
+    
+    var variant_id = $("#lessPack")[0].dataset.variantId;
+    var quantity = $("#lessPack input").val();
+//     var variant_id = $("#freeGift");
+    
+    var data =  "updates["+variant_id+"]="+quantity;
+   
+    
+    quantity --;
+    
+//     $.post('/cart/update.js', data)
+    $.ajax({
+      type: 'POST',
+      url: '/cart/update.js', 
+      dataType: 'json',
+      data: "updates["+variant_id+"]="+quantity, 
+    })
+    .done(function(res){
+    	$("#lessPack input").val(quantity);
+    })
+    .fail(function(err){
+    	console.log(err);
+    });
+  });
+}
+
+  // add a normal proudct when less packaging is checked
+$(".append-checkbox ").on("click", "#nopackaging", function() {
+  var product_id = 31216575447082;
+  
+  var checked = $("#nopackaging").prop("checked")== true;
+  var unchecked = $("#nopackaging").prop("checked")== false;
+  
+  console.log("nopackaging checked",checked);
+  if(checked){
+    localStorage.setItem('nopackaging', true);
+    $.ajax({
+      type: 'POST',
+      url: '/cart/add.js', 
+      dataType: 'json',
+      data: 'quantity=1'+ '&id=' + product_id, 
+    })
+    .done(function(data, textStatus) {
+
+      
+      productAddedbyAppend(data);
+
+    }).fail(function(jqXHR, textStatus) {
+      return console.log("product not added",jqXHR);
+    });  
+  }
+  else{
+  	localStorage.setItem('nopackaging', false);
+    $.ajax({
+      type: 'POST',
+      url: '/cart/update.js', 
+      dataType: 'json',
+      data: "updates["+product_id+"]=0", 
+    })
+    .done(function(res){
+    	removeProductAddedbyAppend(product_id);
+    })
+    .fail(function(err){
+    	console.log(err);
+    });
+  }
+  
+  if(unchecked){
+  	localStorage.setItem('nopackaging', false);
+    $.ajax({
+      type: 'POST',
+      url: '/cart/update.js', 
+      dataType: 'json',
+      data: "updates["+product_id+"]=0", 
+    })
+    .done(function(res){
+    	removeProductAddedbyAppend(product_id);
+    })
+    .fail(function(err){
+    	console.log(err);
+    });
+  }
+  
+  
+      if ($('.variant-id[data-variant-id="31216575447082 "]').length){
+        $("#nopackaging").prop("checked")== true;
+    }
+  
+   else{
+      $("#nopackaging").prop("checked")== false;
+     $("nopackaging").attr("autocomplete", "off");
+     
+   }
+  
+  
+  
+
+});
+
+  $('span#free_more').on('click', function(){
+    $('.cartlisting_free').toggleClass('show_less');
+
+    if($('.cartlisting_free').hasClass('show_less')){
+      $(this).text('See more free options');
+    }else{
+      $(this).text('See less free options');
+    }
+  });
+  
+Shopify.onCartUpdate = function(cart) {
+  alert('There are now ' + cart.item_count + ' items in the cart.');
+};  
+
+
+</script>

@@ -1,0 +1,25 @@
+{% section 'product' %}
+
+
+{% include 'webyze-swatches' %}
+
+{% if product.metafields.loox.num_reviews %}
+<script id="looxSchemaJson" type="application/ld+json">
+{
+	"@context": "http://schema.org",
+	"@type": "Product",
+	"@id": "{{ canonical_url | json }}",
+	"aggregateRating": {
+		"@type": "AggregateRating",
+		"ratingValue": "{{ product.metafields.loox.avg_rating }}",
+		"reviewCount": "{{ product.metafields.loox.num_reviews }}"
+	},
+	"name": "{{ product.title | escape }}"
+}
+</script>
+{% endif %}
+
+<div id="looxReviews" data-product-id="{{product.id}}" class="loox-reviews-default">{{ product.metafields.loox.reviews }}</div>
+
+
+<script src="https://widget.sezzle.com/v1/javascript/price-widget?uuid=1704aca7-0d48-479f-ac1f-dd6a3393aee8"></script>

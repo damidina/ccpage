@@ -1,0 +1,504 @@
+[
+  {
+    "theme_documentation_url": "http:\/\/support.troopthemes.com",
+    "name": "theme_info",
+    "theme_name": "Maker",
+    "theme_author": "Troop Themes",
+    "theme_version": "4.4.1",
+    "theme_support_url": "http:\/\/support.troopthemes.com\/"
+  },
+  {
+    "settings": [
+      {
+        "type": "header",
+        "content": "General"
+      },
+      {
+        "default": "#fff4cc",
+        "id": "color--accent",
+        "label": "Accent color",
+        "type": "color"
+      },
+      {
+        "id": "bg-color--body",
+        "label": "Background",
+        "type": "color"
+      },
+      {
+        "id": "color--body",
+        "label": "Text",
+        "type": "color"
+      },
+      {
+        "default": "#ffffff",
+        "id": "color--alternative",
+        "label": "Alternative text",
+        "type": "color",
+        "info": "Useful for text over conflicting backgrounds"
+      },
+      {
+        "id": "color--headings",
+        "label": "Headings",
+        "type": "color"
+      },
+      {
+        "id": "bg-color--panel",
+        "label": "Panels background",
+        "type": "color"
+      },
+      {
+        "id": "color--important",
+        "label": "Important",
+        "type": "color",
+        "info": "Compare price, sold out, errors"
+      },
+      {
+        "id": "color--button",
+        "label": "Button text",
+        "type": "color"
+      },
+      {
+        "id": "bg-color--button",
+        "label": "Button background",
+        "type": "color"
+      },
+      {
+        "id": "color--header",
+        "label": "Header\/footer text",
+        "type": "color"
+      },
+      {
+        "type": "header",
+        "content": "Announcement"
+      },
+      {
+        "default": "#333333",
+        "id": "bg-color--announcement",
+        "label": "Background",
+        "type": "color"
+      },
+      {
+        "default": true,
+        "id": "announcement--alternative-text",
+        "label": "Enable alternative text color",
+        "type": "checkbox"
+      },
+      {
+        "type": "header",
+        "content": "Collection page"
+      },
+      {
+        "id": "color--collection--title",
+        "label": "Title color (with featured image enabled)",
+        "type": "color"
+      },
+      {
+        "type": "header",
+        "content": "Popup"
+      },
+      {
+        "default": "#ffffff",
+        "id": "color--popup",
+        "label": "Popup text\/icon",
+        "type": "color"
+      },
+      {
+        "default": "#2e2e2e",
+        "id": "bg-color--popup",
+        "label": "Popup background",
+        "type": "color"
+      },
+      {
+        "type": "header",
+        "content": "Color Swatches"
+      },
+      {
+        "type": "color",
+        "id": "color_swatch_black",
+        "label": "Black",
+        "default": "#000000"
+      },
+      {
+        "type": "color",
+        "id": "color_swatch_white",
+        "label": "White",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "color_swatch_blush",
+        "label": "Blush",
+        "default": "#ecd0cc"
+      },
+      {
+        "type": "color",
+        "id": "color_swatch_cyan",
+        "label": "Cyan",
+        "default": "#b3e0ec"
+      },
+      {
+        "type": "color",
+        "id": "color_swatch_rose",
+        "label": "Rose",
+        "default": "#e9999a"
+      },
+      {
+        "type": "color",
+        "id": "color_swatch_stone",
+        "label": "Stone",
+        "default": "#9ca0b6"
+      },
+      {
+        "type": "color",
+        "id": "color_swatch_negroni",
+        "label": "Negroni",
+        "default": "#fecd8a"
+      },
+      {
+        "type": "color",
+        "id": "color_swatch_candy",
+        "label": "Candy",
+        "default": "#f4d6f0"
+      },
+      {
+        "type": "color",
+        "id": "color_swatch_yellow",
+        "label": "Yellow",
+        "default": "#f9e874"
+      }
+    ],
+    "name": "Colors"
+  },
+  {
+    "settings": [
+      {
+        "type": "header",
+        "content": "Headings"
+      },
+      {
+        "default": "alegreya_n7",
+        "id": "typography--heading",
+        "label": "Heading",
+        "type": "font_picker"
+      },
+      {
+        "unit": "px",
+        "default": 28,
+        "min": 16,
+        "max": 32,
+        "step": 4,
+        "label": "Base size",
+        "id": "font--heading-size",
+        "type": "range"
+      },
+      {
+        "type": "header",
+        "content": "Accent",
+        "info": "Navigation, buttons, small headings"
+      },
+      {
+        "default": "lato_n4",
+        "id": "typography--accent",
+        "label": "Accent",
+        "type": "font_picker",
+        "info": "Navigation, buttons, small headings"
+      },
+      {
+        "type": "header",
+        "content": "Body Text"
+      },
+      {
+        "default": "merriweather_sans_n4",
+        "id": "typography--text",
+        "label": "Text",
+        "type": "font_picker"
+      },
+      {
+        "unit": "px",
+        "default": 14,
+        "min": 12,
+        "max": 16,
+        "step": 1,
+        "label": "Base size",
+        "id": "font--text-size",
+        "type": "range"
+      }
+    ],
+    "name": "Typography"
+  },
+  {
+    "settings": [
+      {
+        "id": "favicon",
+        "label": "Icon",
+        "type": "image_picker",
+        "info": "Will be scaled down to 32 x 32px"
+      }
+    ],
+    "name": "Favicon"
+  },
+  {
+    "settings": [
+      {
+        "default": "modal",
+        "options": [
+          {
+            "label": "Page",
+            "value": "page"
+          },
+          {
+            "label": "Modal",
+            "value": "modal"
+          }
+        ],
+        "id": "cart--type",
+        "label": "Cart type",
+        "type": "select"
+      },
+      {
+        "default": true,
+        "id": "cart--show-note",
+        "label": "Enable order notes",
+        "type": "checkbox"
+      }
+    ],
+    "name": "Cart page"
+  },
+  {
+    "settings": [
+      {
+        "id": "social--kickstarter--url",
+        "label": "Kickstarter",
+        "type": "text",
+        "info": "https:\/\/www.kickstarter.com\/projects\/project-name"
+      },
+      {
+        "id": "social--facebook--url",
+        "label": "Facebook",
+        "type": "text",
+        "info": "https:\/\/www.facebook.com\/shopify"
+      },
+      {
+        "id": "social--twitter--url",
+        "label": "Twitter",
+        "type": "text",
+        "info": "https:\/\/twitter.com\/shopify"
+      },
+      {
+        "id": "social--google-plus--url",
+        "label": "Google Plus",
+        "type": "text",
+        "info": "https:\/\/plus.google.com\/+shopify"
+      },
+      {
+        "id": "social--pinterest--url",
+        "label": "Pinterest",
+        "type": "text",
+        "info": "https:\/\/www.pinterest.com\/shopify"
+      },
+      {
+        "id": "social--instagram--url",
+        "label": "Instagram",
+        "type": "text",
+        "info": "https:\/\/instagram.com\/shopify"
+      },
+      {
+        "id": "social--vimeo--url",
+        "label": "Vimeo",
+        "type": "text",
+        "info": "https:\/\/vimeo.com\/shopify"
+      },
+      {
+        "id": "social--youtube--url",
+        "label": "Youtube",
+        "type": "text",
+        "info": "https:\/\/www.youtube.com\/user\/shopify"
+      },
+      {
+        "id": "social--tumblr--url",
+        "label": "Tumblr",
+        "type": "text",
+        "info": "http:\/\/shopify.tumblr.com"
+      },
+      {
+        "type": "header",
+        "content": "Sharing options"
+      },
+      {
+        "id": "social--sharing-products",
+        "label": "Enable sharing for products",
+        "type": "checkbox"
+      },
+      {
+        "id": "social--sharing-blog",
+        "label": "Enable sharing for blog articles",
+        "type": "checkbox"
+      },
+      {
+        "id": "social--share-facebook",
+        "label": "Share on Facebook",
+        "type": "checkbox"
+      },
+      {
+        "id": "social--share-twitter",
+        "label": "Tweet on Twitter",
+        "type": "checkbox"
+      },
+      {
+        "id": "social--share-pinterest",
+        "label": "Pin on Pinterest",
+        "type": "checkbox"
+      },
+      {
+        "id": "social--share-google",
+        "label": "+1 on Google Plus",
+        "type": "checkbox"
+      },
+      {
+        "default": true,
+        "id": "social--share-email",
+        "label": "Show email",
+        "type": "checkbox"
+      },
+      {
+        "default": true,
+        "id": "social--share-link",
+        "label": "Show link",
+        "type": "checkbox"
+      }
+    ],
+    "name": "Social media"
+  },
+  {
+    "settings": [
+      {
+        "default": false,
+        "id": "popup--enabled",
+        "label": "Enable",
+        "type": "checkbox"
+      },
+      {
+        "default": "auto",
+        "options": [
+          {
+            "label": "Auto",
+            "value": "auto"
+          },
+          {
+            "label": "Manual (Open from link only)",
+            "value": "manual"
+          },
+          {
+            "label": "Testing (Open each page reload)",
+            "value": "test"
+          }
+        ],
+        "label": "Mode",
+        "id": "popup--mode",
+        "type": "radio"
+      },
+      {
+        "default": 7,
+        "min": 1,
+        "max": 30,
+        "step": 1,
+        "label": "Show again after (days)",
+        "id": "popup--days-range",
+        "type": "range",
+        "info": "Independent to each browser and device"
+      },
+      {
+        "default": true,
+        "id": "popup--show-image",
+        "label": "Show image",
+        "type": "checkbox"
+      },
+      {
+        "id": "popup--image",
+        "label": "Image",
+        "type": "image_picker",
+        "info": "300 x 450px"
+      },
+      {
+        "default": "<p>Sign up to our newsletter and we'll keep you posted with news and deals each week!<\/p>",
+        "id": "popup--newsletter-title--rt",
+        "label": "Newsletter title",
+        "type": "richtext"
+      },
+      {
+        "default": "Follow us",
+        "id": "popup--social-title",
+        "label": "Social media title",
+        "type": "text"
+      },
+      {
+        "default": true,
+        "id": "popup--social-enabled",
+        "label": "Show social icons",
+        "type": "checkbox"
+      }
+    ],
+    "name": "Popup"
+  },
+  {
+    "settings": [
+      {
+        "default": true,
+        "id": "search--show-in-header",
+        "label": "Show in header and mobile menu",
+        "type": "checkbox"
+      },
+      {
+        "type": "header",
+        "content": "Type of results"
+      },
+      {
+        "type": "paragraph",
+        "content": "In addition to products"
+      },
+      {
+        "default": true,
+        "id": "search--show-articles",
+        "label": "Show blog articles",
+        "type": "checkbox"
+      },
+      {
+        "default": true,
+        "id": "search--show-pages",
+        "label": "Show pages",
+        "type": "checkbox"
+      }
+    ],
+    "name": "Search"
+  },
+  {
+    "name": "Free Gift Promotion",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Free Gift Promotion"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_free_gift",
+        "label": "Enable Free Gift",
+        "default": true
+      },
+      {
+        "type": "product",
+        "id": "free_gift_product_red",
+        "label": "Product to offer as free gift (Red)"
+      },
+      {
+        "type": "product",
+        "id": "free_gift_product_candy",
+        "label": "Product to offer as free gift (Candy)"
+      },
+      {
+        "type": "product",
+        "id": "free_gift_product_yellow",
+        "label": "Product to offer as free gift (Yellow)"
+      }
+    ]
+  }
+]

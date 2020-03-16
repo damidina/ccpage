@@ -1,0 +1,11 @@
+SHARED: &SHARED
+  store: 437swim.myshopify.com
+  password: 9e0d0c1da18cba57f777a8e244068435
+dami-dev:
+  <<: *SHARED
+  theme_id: "78886731818"
+production:
+  <<: *SHARED
+  theme_id: "78846885930"
+  ignore_files:
+  - "config/settings_data.json"

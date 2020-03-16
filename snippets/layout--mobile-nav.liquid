@@ -1,0 +1,34 @@
+<div class="mobile-nav" data-js-class="MobileNav">
+
+  <div class="mobile-nav--header">
+    {% if settings.search--show-in-header %}
+      <div class="mobile-nav--search font--accent">
+        <a href="/search" class="ssm">{{ 'general.search.search' | t }}</a>
+      </div>
+    {% endif %}
+
+    <div class="mobile-nav--login font--accent">
+      {% include 'layout--login' with 'modal' %}
+    </div>
+  </div>
+
+  <div class="mobile-nav--menu font--accent">
+    {% comment %} Copied from header {% endcomment %}
+  </div>
+
+  {% if settings.popup--enabled %}
+    {% if settings.popup--newsletter--enabled %}
+      <div class="mobile-nav--newsletter">
+        <div class="newsletter-wrapper spacing--3y">
+          {% include 'partial--mailing-list'  %}
+        </div>
+      </div>
+    {% endif %}
+    {% if settings.popup--social-icons--enabled %}
+      <div class="mobile-nav--social">
+        {% include 'partial--social-media' with 'modal' %}
+      </div>
+    {% endif %}
+  {% endif %}
+
+</div>

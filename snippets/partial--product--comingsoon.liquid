@@ -1,0 +1,32 @@
+{% comment %} If there are some variants available i.e. not all are sold out {% endcomment %}
+
+  <div class="product-unavailable spacing--3x font--size-1 show-after-js">
+    {% unless product.metafields.coming.soon == blank %}
+	{{ product.metafields.coming.soon }}</div>
+    <a href="#" class="button--secondary get-notified show--large" style="">Get Notified</a>
+	{% endunless %}
+
+
+<script>
+  jQuery(function($) {
+    $(document).ready(function() {
+      $('.text-align--center.color--important.product-page-cart--sold-out').text("Coming Soon");
+      $('.product-unavailable.spacing--3x.font--size-1.show-after-js').hide();
+      $('.esc-out-of-stock-title').text("Coming Soon");
+      $('.get-notified').click(function(e) {
+         e.preventDefault();
+        $('#esc-oos-form').css('left', '40px');
+        $('.esc-out-of-stock-title').text("Coming Soon");
+        $('#esc-oos-form').css('right', '-40px');
+        $('.close-form').css('right', '-40px');
+      });
+      $('.close-form').click(function(e) {
+        $('#esc-oos-form').css('left', '1000px');
+        $('#esc-oos-form').css('right', '-1000px');
+        $('.close-form').css('right', '-400px');
+      });     
+      
+    });
+  });
+</script>
+

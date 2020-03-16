@@ -1,0 +1,51 @@
+
+  {% assign found_a_collection = false %}
+  {% for c in collections %}
+    {% if c.handle == 'best-sellers-1' %}
+      {% assign found_a_collection = true %}
+      {% assign collection = c %}
+    {% endif %}
+  {% endfor %}
+
+
+{% if collection.products.size > 1 %}
+  <div class="related-collection">
+
+    <div class="header text-align--center spacing--4y">
+      <a href="{{ collection.url }}"><h3 class="font--heading">{{ collection.title }}</h3></a>
+    </div>
+
+    <div
+      class="fw--slider"
+      data-js-class="FrameworkSlider"
+      data-navigation="true"
+      data-pagination="true"
+      data-pagination-numbers="true"
+    >
+      {% assign current_product_handle = product.handle %}
+      {% for product in collection.products limit: 10 %}
+        {% if product.handle == current_product_handle %}
+          {% continue %}
+        {% endif %}
+
+        <div class="slide">
+          <div class="wrapper text-align--center partial--product">
+            {% assign image = product.images[0] %}
+            <a href="{{ product.url | within: collection  }}" title="{{ product.title }}">
+              {% comment %}
+              {% include "framework--image", image: image, max_height: 450 %}
+              {% endcomment %}
+              {% include "framework--image-lazy", image: image, max_height: 450 %}
+            </a>
+            <div class="text-panel">
+              <a href="{{ product.url }}">
+                <h2 class="title spacing--3y font--subheading">{{ product.title }}</h2>
+              </a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+
+    </div>
+  </div>
+{% endif %}

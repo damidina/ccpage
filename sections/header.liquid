@@ -1,0 +1,211 @@
+<header
+  class="layout--header spacing--5x"
+  data-section-id="{{ section.id }}"
+  data-section-type="header"
+  data-js-class="Header"
+  {% if section.settings.logo %}
+    data-header--logo-height="{{ section.settings.logo-height-range }}"
+    {% if section.settings.logo-height-range <= 45 %}
+      data-header--logo-type="inline"
+    {% else %}
+      data-header--logo-type="overflowing"
+    {% endif %}
+  {% endif %}
+  
+  curr-currency="{{ cart.currency.iso_code }}"        
+>
+
+  <noscript>
+    <div class="container">
+      <div class="left-side">
+        {% include 'framework--logo' %}
+        {% include 'framework--x-menu',
+          js_class: 'XMenu',
+          overlap_parent: 1,
+          off_canvas: 'right-sidebar',
+          handle: section.settings.menu
+        %}
+      </div>
+      <div class="right-side fw--align--right">
+        {% if settings.search--show-in-header %}
+          <div class="header--search font--accent">
+            <a href="/search"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;{{ 'general.search.search' | t }}</a>
+          </div>
+        {% endif %}
+
+        {% include 'layout--login' %}
+
+        <div class="cart-link font--accent">
+          
+        </div>
+        
+        {% comment %} Added by Craig R June 14, 2019 {% endcomment %}
+        {% if shop.enabled_currencies.size > 1 %}
+          {% form 'currency', class: "currency-selector" %}
+          <div class="currency-selector__input-wrapper select-group font--accent">
+            <select name="currency" id="CurrencySelector" class="currency-selector__dropdown" aria-describedby="a11y-refresh-page-message" data-currency-selector>
+              {% for currency in shop.enabled_currencies %}
+              <option value="{{currency.iso_code}}"{% if currency == cart.currency %} selected="true"{% endif %}>{{currency.iso_code}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          {% endform %}
+        {% endif %}
+      </div>
+    </div>
+  </noscript>
+
+  <div class="header--y-menu-for-off-canvas">
+    {% include 'framework--y-menu', handle: section.settings.menu %}
+  </div>
+
+  <div class="container show-after-js">
+    <div class="left-side">
+      {% include 'framework--logo' %}
+      {% include 'framework--x-menu',
+        js_class: 'XMenu',
+        overlap_parent: 1,
+        off_canvas: 'right-sidebar',
+        handle: section.settings.menu
+      %}
+    </div>
+
+    <div class="right-side">
+      {% if settings.search--show-in-header %}
+        <div class="header--search font--accent">
+          <a href="/search"  class="ss"> <i class="fa fa-search" aria-hidden="true"></i>&nbsp;
+			{{ 'general.search.search' | t }}</a>
+        </div>
+      {% endif %}
+
+      {% include 'layout--login' %}
+      {% include 'partial--popup', component: 'link' %}
+      {% include 'framework--cart' %}
+	   {% if settings.search--show-in-header %}
+        <div class="header--search font--accent mobile-search" style="display:none;">
+          <a href="/search"  class="ss">          
+            <i class="fa fa-search" aria-hidden="true"></i>&nbsp;
+			{{ 'general.search.search' | t }}
+          </a>
+        </div>
+      {% endif %}
+      <a class="header--cart-count font--accent {% if settings.cart--type == 'modal' %}fw--cart-modal--trigger-render{% endif %}" href="#">
+        <img src="https://cdn.shopify.com/s/files/1/2112/6981/t/50/assets/cart-icon.png?v=1583441174"/>
+        {% if cart.item_count > 0 %}
+        <div class="count countamount"><span class="count">{{ cart.item_count }}</span></div>
+      	{% endif %}
+      </a> 
+      
+      {% comment %} Added by Craig R June 14, 2019 {% endcomment %}
+      {% if shop.enabled_currencies.size > 1 %}
+      {% form 'currency', class: "currency-selector" %}
+      <div class="currency-selector__input-wrapper select-group font--accent">
+        <select name="currency" id="CurrencySelector" class="currency-selector__dropdown" aria-describedby="a11y-refresh-page-message" data-currency-selector>
+          {% for currency in shop.enabled_currencies %}
+          <option value="{{currency.iso_code}}"{% if currency == cart.currency %} selected="true"{% endif %}>{{currency.iso_code}}</option>
+          {% endfor %}
+        </select>
+      </div>
+      {% endform %}
+      {% endif %}
+
+      <div class="off-canvas--open" data-off-canvas--open="right-sidebar">
+        {% include 'snippet-symbol' with 'menu' %}
+      </div>
+    </div>
+  </div>
+
+</header>
+
+{% if section.settings.logo %}
+  {% assign offset = section.settings.logo-height-range %}
+  {% assign offset_small = section.settings.logo-height-range %}
+
+  {% if offset > 75 %}
+    {% assign offset_small = 75 %}
+  {% endif %}
+
+  {% if offset > 45 %}
+    {% assign offset = offset | plus: 20 %}
+    {% assign offset_small = offset_small | plus: 15 %}
+    {% assign offset = offset | plus: 30 %}
+  {% else %}
+    {% assign offset = 50 %}
+    {% assign offset_small = 50 %}
+    {% assign offset = offset | plus: 60 %}
+  {% endif %}
+
+
+  {% assign offset_small = offset_small | plus: 30 %}
+
+  <style>
+    header .fw--logo img {
+      height: {{ section.settings.logo-height-range }}px;
+    }
+
+    .layout--main-content {
+      padding-top: {{ offset }}px;
+    }
+
+    @media only screen and (max-width: 827px) {
+      .layout--main-content {
+        padding-top: {{ offset_small }}px;
+      }
+      
+      .countamount {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: #000;
+    width: 20px;
+    height: 20px;
+    border-radius: 100px;
+    text-align: center;
+    line-height: 1.6;
+    font-weight: bold;
+}
+      a.header--cart-count.font--accent.fw--cart-modal--trigger-render {
+    margin-left: 5px;
+    margin-right: 10px;
+}
+      
+      .header--cart-count {
+        background-color:transparent !important;
+        
+      }
+      
+      
+    }
+
+  </style>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image"
+    },
+    {
+      "label": "Custom logo height",
+      "id": "logo-height-range",
+      "type": "range",
+      "min": 15,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 35,
+      "info": "This is referring to the natural height and should be half the height of the image you uploaded to ensure it stays sharp on retina screens."
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    }
+  ]
+}
+{% endschema %}

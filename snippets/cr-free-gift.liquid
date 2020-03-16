@@ -1,0 +1,270 @@
+{% if settings.enable_free_gift %}
+
+<script>
+
+  var crFreeGiftify = function () { 
+    
+    jQuery(function($) {
+
+      const freeGiftProductRed = '{{ settings.free_gift_product_red }}';
+      const freeGiftProductCandy = '{{ settings.free_gift_product_candy }}';
+      const freeGiftProductYellow = '{{ settings.free_gift_product_yellow }}';
+      let freeGiftInfo = {},
+          productIdRed = '',
+          productIdCandy = '',
+          productIdYellow = '',
+          cartData =  {},
+          setInCart =  '',
+          cartMode = '{{ settings.cart--type }}';
+
+          // Check for existance of cookie
+          if (document.cookie.split(';').filter((item) => item.trim().startsWith('want-free-gift=')).length) {
+            var wantFreeGift = 'false';
+          }
+      
+      
+      function getRedJSON() {
+        return $.ajax({
+          type: "GET",
+          url: '/products/' + freeGiftProductRed + '.js',
+          dataType: "json"
+        }).done(function(data, textStatus, jqXHR) {
+          if (textStatus === 'success') {
+            let product = data,
+                color = product.title.split('/')[1].trim().toLowerCase();
+            
+            freeGiftInfo[color] = {
+                id: product.variants[0].id,
+                available: product.variants[0].available
+              }
+            productIdRed = product.id;
+            
+          }
+        }).fail(function(jqXHR, textStatus) {
+          return console.log("-- Could not get free gift product details --");
+        });
+        
+      }
+      function getCandyJSON() {
+        return $.ajax({
+          type: "GET",
+          url: '/products/' + freeGiftProductCandy + '.js',
+          dataType: "json"
+        }).done(function(data, textStatus, jqXHR) {
+          if (textStatus === 'success') {
+            let product = data,
+                color = product.title.split('/')[1].trim().toLowerCase();
+            
+            freeGiftInfo[color] = {
+                id: product.variants[0].id,
+                available: product.variants[0].available
+              }
+            productIdCandy = product.id;
+            
+          }
+        }).fail(function(jqXHR, textStatus) {
+          return console.log("-- Could not get free gift product details --");
+        });
+      }
+      function getYellowJSON() {
+        return $.ajax({
+          type: "GET",
+          url: '/products/' + freeGiftProductYellow + '.js',
+          dataType: "json"
+        }).done(function(data, textStatus, jqXHR) {
+          if (textStatus === 'success') {
+            let product = data,
+                color = product.title.split('/')[1].trim().toLowerCase();
+
+            freeGiftInfo[color] = {
+                id: product.variants[0].id,
+                available: product.variants[0].available
+              }
+            productIdYellow = product.id;
+            
+          }
+        }).fail(function(jqXHR, textStatus) {
+          return console.log("-- Could not get free gift product details --");
+        });
+        
+      }
+
+      // Check to see if cart contains free gift
+      function checkForGift() {
+        let freeGift = false;
+        for ( let i = 0; i < cartData.items.length; i++) {
+          if(cartData.items[i].product_id == productIdRed ) {
+            console.log('The cart contains a red scrunchie with an id of: ' + productIdRed);
+            freeGift = true;
+            break;
+          } else if (cartData.items[i].product_id == productIdYellow){
+            console.log('The cart contains a yellow scrunchie with an id of: ' + productIdYellow);
+            freeGift = true;
+            break;
+          } else if (cartData.items[i].product_id == productIdCandy){
+            console.log('The cart contains a Candy scrunchie with an id of: ' + productIdCandy);
+            freeGift = true; 
+            break;
+          } else {
+            console.log('The cart does not contian any scrunchies.'); 
+          }
+        };
+        return freeGift;
+      }
+
+      function checkForSet() {
+        if ( cartData.items.length > 1 ) {
+          let hasTop = false,
+              hasBottom = false,
+              isSet = false,
+              setColor = '';
+
+          for (let i = 0; i < cartData.items.length; i++) {
+            const item = cartData.items[i];
+            let name,
+                color;
+
+            if (item.product_title.split('/')[1] != undefined ){
+              name = item.product_title.split('/')[0].trim().toLowerCase();
+              color = item.product_title.split('/')[1].trim().toLowerCase();
+            } else {
+              continue;
+            }
+
+            if (color == 'red' || color == 'yellow' || color == 'candy') {             
+              if( name.includes('top') ) {
+                hasTop = true; 
+                setColor = color;
+              } else if ( name.includes('bottom')) {
+                hasBottom = true; 
+                setColor = color;
+              }
+            }
+          };
+
+          if ( hasTop && hasBottom ) {
+            return setColor;
+          }
+        } else {
+          return ''; 
+        }
+      }
+      
+      // called when product successfully added
+      function productAdded() {
+        $('.no-thanks').addClass('hide');
+        $('.gift-added').removeClass('hide');
+        $('.add-free-gift').addClass('hide');
+        $('.go-to-cart').removeClass('hide'); 
+        $('.go-to-cart').on('click', function(e) {
+          e.preventDefault();
+          theme.partials.Cart.renderCart();
+          $('.modal.cart-link .modal--link').trigger('click');
+        });
+      }
+
+      // add product variant to cart and reload page
+      function postProduct(variant_id, quantity) {
+        return $.ajax({
+          type: 'POST',
+          url: '/cart/add.js', 
+          dataType: 'json',
+          data: 'quantity=' + quantity + '&id=' + variant_id + '&properties[_free]=true', 
+        }).done(function(data, textStatus) {
+          if (textStatus === 'success') {
+
+            productAdded();
+
+          }
+        }).fail(function(jqXHR, textStatus) {
+          return console.log("product not added");
+        });
+      }
+
+      function addEventListeners() {
+        $('.no-thanks').on('click', function(e) {
+          e.preventDefault();
+          $('.free-gift-message').removeClass('free-gift-message--active');
+          $('.close-modal').addClass('hide');          
+        });
+        $('.add-free-gift').on('click', function(e) {
+          e.preventDefault();
+          if (freeGiftInfo[setInCart] != undefined) {
+            postProduct(freeGiftInfo[setInCart].id, 1);
+          } else {
+            console.log('Set is not in cart - returning: ' + freeGiftInfo[setInCart]); 
+          }
+        });
+      }
+
+      function injectFreeGiftMessage() {
+        const $cartItemsWrapper = $('form[action="/cart"] .content.fw--blocks');
+        let markup = '';
+
+        markup += `<div class="width--12 spacing--3 free-gift-message"><div class="free-gift-message__wrapper">`;
+        markup += `<span class="title block font--size-4">{{ 'cart.free_gift_modal.title' | t }}<br><br>{{ 'cart.free_gift_modal.subtitle' | t }}</span>`;
+        markup += `<div class="add-free-gift__wrapper"><a class="add-free-gift button" href="/cart">{{ 'cart.free_gift_modal.add_to_cart_button' | t }}</a><a href="/cart" class="button go-to-cart hide">{{ 'cart.free_gift_modal.go_to_cart_text' | t }}</a>`;
+        markup += `<div><p class="form-success hide gift-added">{{ 'cart.free_gift_modal.success_message' | t }}</p></div></div>`;
+        markup += `<a href="#" class="no-thanks">{{ 'cart.free_gift_modal.no_thanks' | t }}</a></div><button class="no-thanks close-modal">{% include 'snippet-symbol' with 'cross' %}</div>`;
+
+
+        $cartItemsWrapper.prepend(markup);
+        $('.free-gift-message').addClass('free-gift-message--active');
+
+        addEventListeners();
+
+      }
+
+      // Get cart information then trigger next step
+      function getCartJSON() {
+        return $.ajax({
+          type: "GET",
+          url: "/cart.js",
+          dataType: "json"
+        }).done(function(data, textStatus, jqXHR) {
+          if (textStatus === 'success') {
+            let cart = data;
+            cartData.total =  cart.total_price;
+            cartData.items = cart.items;
+            cartData.attributes = cart.attributes;
+
+            const isThereAGift = checkForGift();
+
+            setInCart = checkForSet();
+
+            if (setInCart != '' && !isThereAGift && $('.add-free-gift__wrapper').length == 0) {
+              if (freeGiftInfo[setInCart].available) {
+                injectFreeGiftMessage();
+              } else {
+                console.log('The ' + setInCart + ' gift product is not available'); 
+              }
+            }
+          }
+        }).fail(function(jqXHR, textStatus) {
+          return console.log("cart - get cart details failed");
+        });
+      }
+
+      function init() {
+        console.log('-------------------------');
+        console.log('Initialized Free Gift app');
+        console.log('-------------------------');
+        getRedJSON();
+        getCandyJSON();
+        getYellowJSON();
+        getCartJSON(); 
+      }
+      
+      init();
+
+    });
+  };
+
+  {% if settings.cart--type == 'page' and template == 'cart' %}
+    $(document).ready(crFreeGiftify());
+  {% endif %}
+
+</script>
+
+{% endif %}
+

@@ -1,0 +1,120 @@
+{% assign preload = false %}
+{% assign full_width = false %}
+{% assign image_url = image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+{% assign widths = '1500,1800,2000,2400' %}
+{% assign widths = widths | split: ',' %}
+{% assign max_height = 0 %}
+
+{% capture valid_widths %}
+  {% for width in widths %}
+    {% assign width_int = width | plus: 0 %}
+    {% if image.width >= width_int %}{{ width_int }},{% endif %}
+  {% endfor %}
+  {{ image.width }}
+{% endcapture %}
+
+{% assign widths = valid_widths | strip_newlines | remove: ' ' %}
+
+{% assign lazy_classes = 'lazyload' %}
+{% if preload %}
+  {% assign lazy_classes = lazy_classes | append: ' lazypreload' %}
+{% endif %}
+
+{% assign width = image.width | append: "px" %}
+{% if max_height > 0 %}
+  {% assign width = max_height | times: image.aspect_ratio | round: 2 | append: 'px' %}
+{% elsif full_width %}
+  {% assign width = "100%" %}
+{% endif %}
+
+
+
+<div
+  class="image--root"
+  data-aspectratio="{{ image.aspect_ratio }}"
+  style="width: {{ width }};"
+  {{ custom_attributes }}
+>
+  <div
+    class="image--container{% if mobile_image != blank and is_slideshow or is_image_with_text %} desktop-image--container{% endif %}{% if desktop_image_2 != blank %} flex-image-collection{% endif %}"
+    style="position: relative;{% if desktop_image_2 == blank %}padding-top:{{ 1 | divided_by: image.aspect_ratio | times: 100}}%;{% endif %}"
+  >
+    {% if template == 'collection' %}
+     <div class="reveal">
+       {% comment %}
+      <img data-src="{{ product.featured_image.src | product_img_url: 'grande' }}" alt="{{ product.featured_image.alt | escape }}" class="lazyload main-image"/>
+      <img data-src="{{ product.images[1] | product_img_url: 'grande' }}" alt="{{ product.images[1].alt | escape }}" class="lazyload hidden" />
+      {% endcomment %}
+      {% include 'framework--image-lazy' with
+        image: product.featured_image.src,
+        src_override: '//cdn.shopify.com/s/files/1/2112/6981/t/40/assets/437_logo_450x.png',
+        image_class: 'main-image pre-load-logo pre-load-logo--collections',
+        styles: 'height: auto!important;'
+      %}
+      {% include 'framework--image-lazy' with
+        image: product.images[1],
+        exclude_src: true,
+        image_class: 'hidden'
+      %}
+    </div>
+    {% else %}
+      {% comment %} Added by Craig R {% endcomment %}
+      {% if section.settings.featured-content_image_links %}
+        <a href="{{ section.settings.link-url}}">
+      {% endif %}
+      <img
+           class="{{ lazy_classes }}"
+           data-src="{{ image_url }}"
+           data-sizes="auto"
+           data-widths="[{{ widths }}]"
+           data-aspectratio="{{ image.aspect_ratio }}"
+           alt="{{ image.alt | escape }}"
+           style="{% if desktop_image_2 != blank %}position:static; flex: 3;height: auto{% endif %}"
+           >
+
+      {% if section.settings.featured-content_image_links %}
+        </a>
+      {% endif %}
+      {% if desktop_image_2 != blank %}
+    	{% assign image_url2 = desktop_image_2 | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+            <img
+             class="test"
+             data-src="{{ image_url2 }}"
+             data-sizes="auto"
+             data-widths="[{{ widths }}]"
+             data-aspectratio="{{ desktop_image_2.aspect_ratio }}"
+             alt="{{ desktop_image_2.alt | escape }}"
+             style="position:static; flex: 2; padding: 0 100px 0 100px; width: auto;max-height: 530px;"
+             >
+      {% endif %}
+    {% endif %}
+  </div>
+  {% if template == 'collection' %}
+    <div class="variants">
+      <span class="variants-title">SIZE</span>
+      {% for variant in product.variants %}
+      <span class="size-swatch {% if variant.available %}{% else %}disabled{% endif %}" data-size="{{ variant.title }}"></span>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <noscript>
+    <img
+      src="{{ image | img_url: '1024x1024' }}"
+      alt="{{ image.alt | escape }}"
+    >
+  </noscript>
+  {% comment %} Mobile image {% endcomment %}
+  {% if template == 'index' %}
+    {% if mobile_image != blank and is_slideshow or is_image_with_text %}
+  <a href="{{ block.settings.slide-link-url }}">
+    <div
+      class="image--container mobile-image--container"
+      style="padding-top:{{ 1 | divided_by: mobile_image.aspect_ratio | times: 100}}%; position: relative;"
+    >
+      <img class="slideshow__mobile-image" src="{{ mobile_image | img_url: '3000x' }}" alt="{{ mobile_image.alt | escape }}"/>
+    </div>
+  </a>
+    {% endif %}
+  {% endif %}
+</div>

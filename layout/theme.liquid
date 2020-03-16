@@ -1,0 +1,91 @@
+<!doctype html>
+<!--[if IE 9]> <html class="ie9 no-js"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js"> <!--<![endif]-->
+
+<head>
+  <!-- Maker Theme - Version 4.4.1 by Troop Themes - http://troopthemes.com/ -->
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=0, maximum-scale=1.0">
+
+  <link rel="canonical" href="{{ canonical_url }}">
+  {% if settings.favicon != nil %}
+    <link rel="shortcut icon" href="{{ settings.favicon | img_url: '32x32' }}" type="image/png">
+  {% endif %}
+  {% if template == 'index' %}
+    <title>{{ page_title }}</title>
+  {% elsif template == 'password' %}
+    <title>{{ shop.name }}</title>
+  {% else %}
+    <title>{{ page_title }} | {{ shop.name }}</title>
+  {% endif %}
+  {% if page_description %}
+    <meta name="description" content="{{ page_description }}">
+  {% endif %}
+
+  {% include 'framework--social-meta-tags' %}
+
+  {{ content_for_header }}
+
+  {% include 'theme-styles' %}
+  {% include 'theme-scripts-head' %}
+
+	{{ shop.metafields.loox["global_html_head"] }}
+</head>
+
+<body
+  class="template--{{ template | split: '.' | first | remove: '_' | replace: '/', '--' }} page--{{ page_title | handle }}{% if customer %} customer-logged-in{% endif %}"
+  {% if template contains 'customers' %}
+    data-account-template="true"
+  {% endif %}
+>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5JKBWXC"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <!-- Icons -->
+  {% include 'icon-sprite.svg' %}
+
+  <div class="loading-icon">Loading&#8230;</div>
+    <div
+      class="off-canvas--viewport"
+      data-js-class="OffCanvas"
+      data-off-canvas--state="closed"
+    >
+      <div class="off-canvas--overlay"></div>
+      <div class="off-canvas--close">{% include 'framework--icon', icon: 'cross' %}</div>
+
+      <div class="off-canvas--main-content">
+
+        {% unless template contains 'password' %}
+          {% section 'bannersale' %}
+          {% section 'announcement' %}
+          {% section 'header' %}
+        {% endunless %}
+
+        <main role="main" class="layout--main-content">
+          {{ content_for_layout }}
+        </main>
+
+
+        {% section 'footer' %}
+        {% include 'partial--popup', component: 'main' %}
+      </div>
+
+      <div class="off-canvas--right-sidebar">
+        {% include 'layout--mobile-nav' %}
+      </div>
+    </div>
+
+    {% include 'framework--feedback-bar' %}
+    {% include 'framework--search', view: 'modal' %}
+
+    {{ shop.metafields.loox["global_html_body"] }}
+
+    <!-- Scripts -->
+    {% include 'theme-scripts-body' %}
+    {{ 'theme-custom.js' | asset_url | script_tag }}
+</body>
+</html>

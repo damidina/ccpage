@@ -1,0 +1,143 @@
+<!-- Google Optimize Start -->
+<!-- Anti-flicker snippet (recommended)  -->
+<!-- <style>.async-hide { opacity: 0 !important} </style> -->
+<!-- <script>(function(a,s,y,n,c,h,i,d,e){s.className+=' '+y;h.start=1*new Date;
+h.end=i=function(){s.className=s.className.replace(RegExp(' ?'+y),'')};
+(a[n]=a[n]||[]).hide=h;setTimeout(function(){i();h.end=null},c);h.timeout=c;
+})(window,document.documentElement,'async-hide','dataLayer',4000,
+{'GTM-5JKBWXC':true});</script> -->
+<!-- Google Optimize End -->
+
+<!-- Tik Tok Pixel START -->
+<script>
+(function() {
+  var ta = document.createElement('script'); ta.type = 'text/javascript'; ta.async = true;
+  ta.src = document.location.protocol + '//' + 'static.bytedance.com/pixel/sdk.js?sdkid=BOE91GP6KSL387EOVTQ0';
+  var s = document.getElementsByTagName('script')[0];
+  s.parentNode.insertBefore(ta, s);
+})();
+</script>
+<!-- Tik Tok Pixel END -->
+
+<!-- Facebook Pixel Code -->
+<script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window,document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+   fbq('init', '461881907738958');
+  fbq('track', 'PageView');
+</script>
+<noscript>
+ <img height="1" width="1"
+src="https://www.facebook.com/tr?id=461881907738958&ev=PageView
+&noscript=1"/>
+</noscript>
+<script>
+  window['_fs_debug'] = false;
+  window['_fs_host'] = 'fullstory.com';
+  window['_fs_org'] = 'P5KQT';
+  window['_fs_namespace'] = 'FS';
+  (function(m,n,e,t,l,o,g,y){
+  if (e in m) {if(m.console && m.console.log) { m.console.log('FullStory namespace conflict. Please set window["_fs_namespace"].');} return;}
+  g=m[e]=function(a,b,s){g.q?g.q.push([a,b,s]):g._api(a,b,s);};g.q=[];
+  o=n.createElement(t);o.async=1;o.crossOrigin='anonymous';o.src='https://'+_fs_host+'/s/fs.js';
+  y=n.getElementsByTagName(t)[0];y.parentNode.insertBefore(o,y);
+  g.identify=function(i,v,s){g(l,{uid:i},s);if(v)g(l,v,s)};g.setUserVars=function(v,s){g(l,v,s)};g.event=function(i,v,s){g('event',{n:i,p:v},s)};
+  g.shutdown=function(){g("rec",!1)};g.restart=function(){g("rec",!0)};
+  g.log = function(a,b) { g("log", [a,b]) };
+  g.consent=function(a){g("consent",!arguments.length||a)};
+  g.identifyAccount=function(i,v){o='account';v=v||{};v.acctId=i;g(o,v)};
+  g.clearUserCookie=function(){};
+})(window,document,window['_fs_namespace'],'script','user');
+</script>
+<!-- End Facebook Pixel Code -->
+
+<!--Gorgias Chat Widget Start-->
+<div id="gorgias-chat">
+  {% if customer %}
+    <script>
+      window.gorgiasChatParameters = {"smooch": {"givenName": "{{ customer.name }}","email": "{{ customer.email }}","properties": {"shopify__cart__total_price": "{{ cart.total_price | money | strip_html | default: null }}","shopify__cart__nb_of_items": {{ cart.items | size | default: 0 }},{% for item in cart.items %}"shopify__cart__items-{{ forloop.index }}-[]":"{\"line_price\":\"{{item.line_price|money|strip_html|default:null}}\",\"price\":\"{{item.price|money|strip_html|default:null}}\",\"product_id\":\"{{item.product_id|default:null}}\",\"quantity\":{{item.quantity|default:null}},\"sku\":\"{{item.sku|default:null}}\",\"title\":\"{{item.title}}\",\"variant_id\":{{item.variant_id|default:null}},\"vendor\":\"{{item.vendor|default:null}}\",\"id\":{{item.id|default:null}}}"{% if forloop.last != true %},{% endif %}{% endfor %}}}}
+    </script>
+  {% else %}
+    <script>
+      window.gorgiasChatParameters = {"smooch": {"properties": {"shopify__cart__total_price": "{{ cart.total_price | money | strip_html | default: null }}","shopify__cart__nb_of_items": {{ cart.items | size | default: 0 }},{% for item in cart.items %}"shopify__cart__items-{{ forloop.index }}-[]":"{\"line_price\":\"{{item.line_price|money|strip_html|default:null}}\",\"price\":\"{{item.price|money|strip_html|default:null}}\",\"product_id\":\"{{item.product_id|default:null}}\",\"quantity\":{{item.quantity|default:null}},\"sku\":\"{{item.sku|default:null}}\",\"title\":\"{{item.title}}\",\"variant_id\":{{item.variant_id|default:null}},\"vendor\":\"{{item.vendor|default:null}}\",\"id\":{{item.id|default:null}}}"{% if forloop.last != true %},{% endif %}{% endfor %}}}}
+    </script>
+  {% endif %}
+    <script src="https://config.gorgias.io/production/r1WE86rAlKxJ4Mvg/chat/JWjXVxG3m4GxDvMq.js" defer></script>
+</div>
+<!--Gorgias Chat Widget End-->
+
+<!-- Lazy Loading START -->
+<script type="text/javascript">
+  window.lazySizesConfig = window.lazySizesConfig || {};
+  window.lazySizesConfig.rias = window.lazySizesConfig.rias || {};
+
+  window.lazySizesConfig.expand = 1200;
+  window.lazySizesConfig.loadMode = 3;
+  window.lazySizesConfig.ricTimeout = 50;
+</script>
+{{ 'ls.rias.min.js' | asset_url | script_tag }}
+{{ 'lazysizes.min.js' | asset_url | script_tag }}
+<!-- Lazy Loading END -->
+
+<!-- Shopify Scripts START -->
+{{ '//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js' | script_tag }}
+{{ 'api.jquery.js' | shopify_asset_url | script_tag }}
+{{ 'option_selection.js' | shopify_asset_url | script_tag }}
+
+{% if template contains 'customers' %}
+  {{ 'shopify_common.js' | shopify_asset_url | script_tag }}
+  {{ 'customer_area.js'  | shopify_asset_url | script_tag }}
+{% endif %}
+
+{{ "/services/javascripts/currencies.js" | script_tag }}
+{{ "jquery.currencies.min.js" | asset_url | script_tag }}
+
+<script>
+  var theme = {};
+  theme.settings = {};
+  theme.translations = {};
+  theme.classes = {};
+  theme.utils = {};
+  theme.partials = {};
+
+  theme.shop_url = '{{ shop.url }}';
+  theme.money_format = '{{ shop.money_format | strip_html | replace: "'
+  ", '"
+  ' | strip }}';
+  theme.currency_switcher_enabled = false;
+  theme.cart_type = '{{ settings.cart--type }}';
+
+  theme.translations.cart_subtotal = '{{ "cart.subtotal" | t }}';
+  theme.translations.remove_item = '{{ "cart.remove_item" | t }}';
+  theme.translations.remove_one_item = '{{ "cart.remove_one_item" | t }}';
+  theme.translations.add_one_item = '{{ "cart.add_one_item" | t }}';
+  theme.translations.products_sold_out_email_description = '{{ "products.sold_out.email_description" | t }}';
+  theme.translations.general_search_see_all_results = '{{ "general.search.see_all_results" | t }}';
+  theme.translations.mailing_list_success_message = '{{ "general.mailing_list.success_message" | t }}';
+  theme.translations.mailing_list_email_blank = '{{ "general.mailing_list.email_blank" | t }}';
+
+  theme.product_json = new Array();
+  theme.variant_id_list = new Array();
+
+  /* Added by Craig R */
+  theme.multiple_currencies = false;
+  theme.crFreeGiftEnable = '{{ settings.enable_free_gift }}';
+</script>
+
+{{ 'theme.js' | asset_url | script_tag }}
+<!-- Shopify Scripts END -->
+
+<!-- Lightslider - Carousels -->
+{{ 'lightslider.min.js' | asset_url | script_tag }}
+{% comment %}Extra Libraries{% endcomment %}
+{% include 'bold-common' %}
+{% comment %}
+<!-- Ajaxinate - Shopify Endless Scroll -->
+{{ 'ajaxinate.min.js' | asset_url | script_tag }}
+{% endcomment %}

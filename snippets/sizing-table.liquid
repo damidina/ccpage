@@ -1,0 +1,64 @@
+<style>
+  table.sizing-guide-table {
+    width: 100%;
+  }
+  table.sizing-guide-table td {
+    text-align: center;
+  }
+  .custom-modal h2 {
+    margin: 16px 0;
+    text-align: center;
+  }
+</style>
+{% if size_chart != blank %}
+  {% assign rows = size_chart | split: '|' %}
+  <h2>Product Sizing</h2>
+  <table class="sizing-guide-table">
+    {% for row in rows %}
+    {% assign columns = row | split: ' ' %}
+    {% assign column_index = forloop.index %}
+    <tr>
+      {% for column in columns %}
+      <td>
+        {% if forloop.index == 1 or column_index == 1 %}
+        <b>
+          {{ column }}
+        </b>
+        {% else %}
+        {{ column }}
+        {% endif %}
+      </td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </table>
+{% endif %}
+
+{% if size_chart_2 != blank %}
+  {% assign rows = size_chart_2 | split: '|' %}
+  <h2>International Sizing</h2>
+  <table class="sizing-guide-table">
+    {% for row in rows %}
+    {% assign columns = row | split: ' ' %}
+    {% assign column_index = forloop.index %}
+    <tr>
+      {% for column in columns %}
+      <td>
+        {% if forloop.index == 1 or column_index == 1 %}
+        <b>
+          {{ column }}
+        </b>
+        {% else %}
+        {{ column }}
+        {% endif %}
+      </td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </table>
+{% endif %}
+
+{% if product.metafields.faqs.top != blank %}
+	<h2>FAQS</h2>
+	<p>{{product.metafields.faqs.top | newline_to_br  }}</p>
+{% endif %}

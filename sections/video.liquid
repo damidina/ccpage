@@ -1,0 +1,39 @@
+{% if section.settings.mobile-video-id != blank %}
+				<video class="hidden-desktop-show" autoplay loop muted>
+		<source src="{{ section.settings.mobile-video-id }}" type="video/mp4">
+	</video>
+            {% endif %}
+            
+            {% if section.settings.video-id != blank %}
+            	<iframe style="width: 100vw; height: 56.25vw" class="vimeo-player" src="https://player.vimeo.com/video/{{ section.settings.video-id }}?background=1&muted=1&autoplay=1&loop=1&byline=0&title=0" frameborder="0" playsinline autoplay defaultMuted allowfullscreen allow=autoplay></iframe>
+            {% endif %}
+
+
+
+{% schema %}
+
+{
+  "name": "Full screen video",
+  "settings": [
+        {
+          "type": "text",
+          "id": "video-id",
+          "label": "Desktop vimeo external id",
+		  "default": "359650402"
+        },
+        {
+          "type": "text",
+          "id": "mobile-video-id",
+          "label": "Mobile video url",
+		  "default": "https://cdn.shopify.com/s/files/1/2112/6981/files/kenzie_top_black_-_leo_bottom_black_beth_2.mov?9937"
+        }
+  ],
+
+  "presets": [
+    {
+      "name": "Full screen video",
+	  "category": "A"
+    }
+  ]
+}
+{% endschema %}

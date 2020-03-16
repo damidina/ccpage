@@ -1,0 +1,150 @@
+<div class="spacing--4x">
+  <article class="about-page-wrapper spacing--0">
+    <h1 class="page-title font--heading text-align--center">{{ page.title }}</h1>
+    <div class="spacer spacing--4y"></div>
+    <div class="rte-content content">
+
+
+      {% for block in section.blocks %}
+        {% case block.type %}
+
+        {% when 'image' %}
+          <div class="layout-type--grid fw--blocks width--12 text-align--center">
+             <div class="block">
+                <!-- <img src="{{ block.settings.block_image | img_url: 'master' }}">
+               -->
+               {% include 'framework--image-lazy' with
+                image: section.settings.block_image,
+                full_width: true,
+                %}
+             </div>
+          </div>
+
+          {% when 'text' %}
+            <div class="container layout-type--grid fw--blocks width--12 text-align--center text-align--small--left">
+              <div class="block">
+              {% if block.settings.title.size > 0 %}
+              <h3 class="h4">{{ block.settings.title }}</h3>
+              {% endif %}
+              <div class="">{{ block.settings.richtext }}</div>
+              </div>
+            </div>
+
+          {% when 'image-text' %}
+         {% if block.settings.lr_layout == 'left' %}
+            <div class="container layout-type--grid fw--blocks clear-after--medium-2 clear-after--large-2 text-align--center image-text">
+              <div class="block width--large-6 spacing--3x">
+                <!-- <img src="{{ block.settings.img_text_image | img_url: 'master' }}"> -->
+                {% include 'framework--image-lazy' with
+                  image: block.settings.img_text_image,
+                  full_width: true,
+                %}
+              </div>
+
+              <div class="block width--large-6 spacing--3x text-align--left">
+                <div class="header-text">
+                  {% if block.settings.img_text_title.size > 0 %}
+                  <h3 class="h4">{{ block.settings.img_text_title }}</h3>
+                  {% endif %}
+                </div>
+                <div class="">{{ block.settings.img_text_richtext }}</div>
+              </div>
+            </div>
+
+            {% else %}
+            <div class="container layout-type--grid fw--blocks clear-after--medium-2 clear-after--large-2 text-align--center image-text reverse">
+              <div class="block width--large-6 spacing--3x text-align--left">
+                <div class="header-text">
+                  {% if block.settings.img_text_title.size > 0 %}
+                  <h3 class="h4">{{ block.settings.img_text_title }}</h3>
+                  {% endif %}
+                </div>
+                <div class="">{{ block.settings.img_text_richtext }}</div>
+              </div>
+              <div class="block width--large-6 spacing--3x">
+                <img src="{{ block.settings.img_text_image | img_url: 'master' }}">
+                {% include 'framework--image-lazy' with
+                  image: block.settings.img_text_image,
+                  full_width: true,
+                %}
+              </div>
+            </div>
+
+            {% endif %}
+
+        {% endcase %}
+      {% endfor %}
+
+ 	</div>
+  </article>
+</div>
+
+
+{% schema %}
+  {
+    "name": "About Us",
+    "max_blocks": 10,
+    "blocks": [
+      {
+        "type": "image",
+        "name": "Image",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "block_image",
+            "label": "Choose image"
+          }
+        ]
+      },
+	  {
+        "type": "text",
+        "name": "Text",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Heading",
+            "default": "Heading"
+          },
+          {
+            "type": "richtext",
+            "id": "richtext",
+            "label": "Text"
+          }
+        ]
+      },
+	  {
+        "type": "image-text",
+        "name": "Image and Text",
+        "settings": [
+          {
+            "type": "select",
+            "id": "lr_layout",
+            "options": [
+              { "value": "left", "label": "Image Left"},
+              { "value": "right", "label": "Image Right"}
+            ],
+			"default":   "left",
+            "label": "Layout"
+          },
+		  {
+            "type": "image_picker",
+            "id": "img_text_image",
+            "label": "Choose image"
+          },
+          {
+            "type": "text",
+            "id": "img_text_title",
+            "label": "Heading",
+            "default": "Heading"
+          },
+          {
+            "type": "richtext",
+            "id": "img_text_richtext",
+            "label": "Text"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

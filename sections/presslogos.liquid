@@ -1,0 +1,49 @@
+<div class="press-logo mobilehidden">
+  <!-- <img src="{{ section.settings.image-press | img_url: '3200x' }}" /> -->
+  {% include 'framework--image-lazy' with
+    image: section.settings.image-press,
+    full_width: true,
+  %}
+</div>
+
+<div class="press-logo mobileonly">
+  <!-- <img src="{{ section.settings.image-press-mobile | img_url: '3200x' }}" /> -->
+  {% include 'framework--image-lazy' with
+    image: section.settings.image-press-mobile,
+    full_width: true,
+    mobile: true
+  %}
+</div>
+
+{% schema %}
+
+{
+  "name": "Press Logos",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Desktop Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image-press",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Mobile Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image-press-mobile",
+      "label": "Image"
+    }
+  ],
+
+  "presets": [
+    {
+      "name": "Press Logos"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,170 @@
+{% layout none %}
+
+{% assign formatted_initial_value = gift_card.initial_value | money_without_trailing_zeros: gift_card.currency %}
+{% assign formatted_initial_value_stripped = formatted_initial_value | strip_html %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="format-detection" content="telephone=no">
+  <link rel="canonical" href="{{ canonical_url }}">
+
+  <title>437 Swimwear | {{ 'gift_cards.issued.title' | t: value: formatted_initial_value_stripped, shop: shop.name }}</title>
+  <meta name="description" content="{{ 'gift_cards.issued.subtext' | t }}">
+
+  {{ 'styles.gift-card.scss.css' | asset_url | stylesheet_tag }}
+  {{ 'vendor/qrcode.js' | shopify_asset_url | script_tag }}
+  <link href="//fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+
+  <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <script type='text/javascript'>
+    function selectText(element) {
+
+        var doc = document;
+        var text = doc.getElementById(element);
+
+        if (doc.body.createTextRange) { // ms
+            var range = doc.body.createTextRange();
+            range.moveToElementText(text);
+            range.select();
+        } else if (window.getSelection) { // moz, opera, webkit
+            var selection = window.getSelection();
+            var range = doc.createRange();
+            range.selectNodeContents(text);
+            selection.removeAllRanges();
+            selection.addRange(range);
+        }
+
+    }
+  </script>
+
+</head>
+
+<body>
+
+  <div class="wrap">
+
+    <br>
+    
+    <div class="giftcontain">
+
+    
+    <div class="giftcardbg">
+      
+      <div class="giftlogo">
+    
+      <img src="https://cdn.shopify.com/s/files/1/2112/6981/t/32/assets/newlogo.png?v=1579881539" />
+        
+      </div>
+      
+              {% assign initial_value_size = formatted_initial_value | size %}
+                  <div id="gift-amount-big" class="{% if initial_value_size > 6 %}medium{% endif %}">
+                    {% if gift_card.balance != gift_card.initial_value %}
+                      <span class="tooltip-container"><span class="tooltip-label">{{ gift_card.balance | money }} <small>{{ 'gift_cards.issued.left' | t }}</small></span><span class="tooltip-triangle"></span></span>
+                    {% endif %}
+                    <strong>{{ formatted_initial_value }}</strong>
+                  </div>
+      
+
+      
+                        {% assign code_size = gift_card.code | format_code | size %}
+                 <div id="gift-card-code-inner">
+                      <strong id="gift-card-code-digits">{{ gift_card.code | format_code }}</strong>
+                    </div>
+      
+            <p>Copy the giftcard code for checkout or add to Apple Wallet</p>
+      <a href="{{ gift_card.pass_url }}"><img id="apple-wallet-badge" src="{{ 'gift-card/add-to-apple-wallet.svg' | shopify_asset_url }}" width="120" height="40" alt="Add To Apple Wallet"></a>
+  
+      
+    </div>
+    
+                
+      
+      <h2 class="gifth2">Shop our favs</h2>
+                    
+      <ul class="giftbuy">
+           <a href="https://437swimwear.com/collections/tops">
+             
+      <li class="giftcard-coll">
+                 
+        <div class="giftimg">
+          <img src="https://cdn.shopify.com/s/files/1/2112/6981/collections/aubrey_rose_front_1024x1024_cc907b43-957f-4586-89a1-602eaa93cd95_1024x1024_1_1500x.jpg?v=1574098978" />
+        </div>
+        
+        <h3>Tops</h3>
+                 </li>
+        </a>
+        <a href="https://437swimwear.com/collections/bottom">
+        
+              <li class="giftcard-coll">
+                 
+        <div class="giftimg">
+          <img src="https://cdn.shopify.com/s/files/1/2112/6981/collections/MM_7160_1_1024x1024_1_1500x.jpg?v=1574099060" />
+        </div>
+        
+        <h3>Bottoms</h3>
+                 </li>
+          
+        </a>
+        
+           <a href="https://437swimwear.com/collections/one-pieces">
+              <li class="giftcard-coll">
+                 
+        <div class="giftimg">
+          <img src="https://cdn.shopify.com/s/files/1/2112/6981/collections/white_johnson_1297x.jpg?v=1574099765" />
+        </div>
+        
+        <h3>One Pieces</h3>
+                 </li>
+        </a>
+        
+           <a href="https://437swimwear.com/collections/best-sellers-1">
+              <li class="giftcard-coll">
+                 
+        <div class="giftimg">
+          <img src="https://cdn.shopify.com/s/files/1/2112/6981/collections/MM_7247_1500x.jpg?v=1574099723" />
+        </div>
+        
+        <h3>Best Sellers</h3>
+                 </li>
+        </a>
+      </ul>
+        
+      
+          
+    <div class="giftcontain">
+         <div id="gift-card-actions">
+                <a href="{{ shop.url }}" class="btn center" target="_blank">{{ 'gift_cards.issued.shop_link' | t }}</a>
+                
+              </div>
+         <div id="gift-card-actions">
+      <a href="#" class="action-link" onclick="window.print();"><i class="ico-16 print"></i>{{ 'gift_cards.issued.print' | t }}</a>
+       </div>
+      <div id="qr-code-special"></div>
+<script>
+  new QRCode(document.getElementById("qr-code-special"), {
+    text: "{{ gift_card.qr_identifier }}",
+    width: 120,
+    height: 120
+  });
+</script>
+      
+      </div>
+
+ 
+    </div>
+      
+      
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,671 @@
+{% assign view = partial--product %}
+{% assign has_hover = false %}
+{% if product.images.size > 1 and advanced--collection--hover-image %}
+  {% assign has_hover = true %}
+{% endif %}
+
+{% if view == 'product-page' %}
+
+  <div class="partial--product view--full" data-view="product-page" itemscope itemtype="http://schema.org/Product" data-handle="{{ product.handle }}" data-id="{{ product.id }}" data-variants-size="{{ product.variants.size }}">
+    <meta itemprop="url" content="{{ shop.url }}{{ product.url }}" />
+    <meta itemprop="name" content="{{ product.title }}" />
+    <meta itemprop="image" content="{{ product.featured_image.src | product_img_url: '1000x' }}" />
+    <script>theme.product_json[{{ product.id }}] = {{ product | json }}; </script>
+
+    <div class="details">
+
+      <div class="add-to-cart{% unless product.variants.size > 1 %} no-variants{% endunless %}">
+        {% form 'product', product %}
+        
+       
+        
+        <script data-app="esc-out-of-stock" type="text/json">[{% for variant in product.variants %}{"id":{{ variant.id }},"title":"{{ variant.title }}","option1":{% if variant.option1 %}"{{ variant.option1 }}"{% else %}null{% endif %},"option2":{% if variant.option2 %}"{{ variant.option2 }}"{% else %}null{% endif %},"option3":{% if variant.option3 %}"{{ variant.option3 }}"{% else %}null{% endif %},"sku":{% if variant.sku %}"{{ variant.sku }}"{% else %}null{% endif %},"requires_shipping":{{ variant.requires_shipping }},"taxable":{{ variant.taxable }},"featured_image":{% if variant.featured_image %}"{{ variant.featured_image }}"{% else %}null{% endif %},"available":{{ variant.available }},"name":"{{ variant.name }}","public_title":"{{ variant.public_title }}","options":{{ variant.options | json }},"price":{{ variant.price }},"weight":{% if variant.weight %}{{ variant.weight }}{% else %}0{% endif %},"compare_at_price":{% if variant.compare_at_price %}{{ variant.compare_at_price }}{% else %}null{% endif %},"inventory_quantity":{{ variant.inventory_quantity }},"inventory_management":{% if variant.inventory_management %}"{{ variant.inventory_management }}"{% else %}null{% endif %},"inventory_policy":{% if variant.inventory_policy %}"{{ variant.inventory_policy }}"{% else %}null{% endif %},"barcode":{% if variant.barcode %}"{{ variant.barcode }}"{% else %}null{% endif %}}{% unless forloop.last %},{% endunless %}{% endfor %}]</script>
+        <div id="esc-oos-form"></div>
+        
+          <div class="show--small-medium product__title-mobile">
+            <div class="title-below">
+              
+              <a href="#looxReviews">
+                <div class="loox-rating" data-id="{{ product.id }}" data-rating="{{ product.metafields.loox.avg_rating }}" data-raters="{{ product.metafields.loox.num_reviews }}">
+                </div>
+              </a>
+
+              {% unless section.settings.position-title-above %}
+              <div class="spacing--3x show--large"><a class="title" href="{{ product.url }}"><h1 class="font--heading">{{ product.title }}</h1></a></div>
+              {% endunless %}
+            </div>
+
+            <div class="price font--accent font--subheading--size show--small-medium" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+              <meta itemprop="priceCurrency" content="{{ shop.currency }}" />
+              {% if product.available %}
+              <link itemprop="availability" href="http://schema.org/InStock" />
+              {% else %}
+              <link itemprop="availability" href="http://schema.org/OutOfStock" />
+              {% endif %}
+
+              {% assign price_meta = product.selected_or_first_available_variant.price | divided_by: 100.00 %}
+              <meta itemprop="price" content="{{ price_meta }}">
+
+              {% if product.price > 0 %}
+              <span class="compare-price money">{% if product.compare_at_price > product.price and product.available %}{{ product.compare_at_price | money }}{% endif %}</span>
+
+              {% endif %}
+
+            </div>
+            
+			
+            
+         
+            
+          </div>
+        
+        
+        
+        
+
+          {% include 'description-product' %}
+<div class="custom-block">
+
+<div class="test-contain left-contain">
+              {% if product.description contains '<!-- material -->' %}
+                {% assign before_materials = product.description | split: '<!-- material -->' | first %}
+                {% assign materials_onward = product.description | split: '<!-- material -->' | last %}
+                {% assign materials = materials_onward | split: '<!-- split -->' | first %}
+                  {{ before_materials }}  
+  <div class="sizefitarea">
+          
+                                <div class="sizing-guide-link">
+                  <a class="open-sizing-guide" href="#sizing-guide">{{ 'products.size_guide' | t }}</a>
+                </div>  </div>
+              </div>
+
+
+  
+  <div class="test-contain right-contain">
+
+              
+                {{ materials }}
+              
+              {% else %}
+                {{ product.description | split: '<!-- split -->' | first }}
+              {% endif %}
+              
+                               <div>
+              <h4>SHIPPING</h4>
+			  {{ section.settings.shipping_information }}
+              
+              <div class="shipping-guide-link">
+                  <a class="open-shipping-guide" href="#shipping-guide">View our shipping chart</a>
+                </div>
+              
+              <h4 class="return-policy">RETURNS</h4>
+              {{ section.settings.returns_information }}
+              
+            </div>
+  </div>
+          
+  
+          </div>
+        
+          <div class="mobileonly moveup-class">
+                <h1 class="producttitle">
+        {{ product.title }}
+      </h1>
+          
+          
+                      <a href="#looxReviews">
+                    <div class="loox-rating" data-id="{{ product.id }}" data-rating="{{ product.metafields.loox.avg_rating }}" data-raters="{{ product.metafields.loox.num_reviews }}">
+                    </div>
+                  </a>
+                  <div class="centermobile">
+                    {% assign price_meta = product.selected_or_first_available_variant.price | divided_by: 100.00 %}
+                    <meta itemprop="price" content="{{ price_meta }}">
+
+                    {% if product.price > 0 %}
+                    <span class="compare-price money">{% if product.compare_at_price > product.price and product.available %}{{ product.compare_at_price | money }}{% endif %}</span>
+                    <span class="actual-price money">{{ product.price | money_without_trailing_zeros }}</span>
+                    {% endif %}
+
+            <p class="interest-free">Or 4 interest-free payments of {{ product.price | divided_by: 4 | money }} with <a href="https://sezzle.com/faq/shopper" target="_blank"><img src="{{ 'full-rgb-lg.png' | file_img_url: '200x' }}" style="padding-bottom: 4px; vertical-align: middle; width: 70px;"/></a> (U.S. customers only). <a href="#">Learn more.</a>
+                </p>
+          
+                        {% if section.settings.smart_payment_button and product.available %}
+                <div class="product-page--smart-payment-buttons">
+                  {{ form | payment_button }}
+                </div>
+              {% endif %}
+          
+          {% assign cart_button_class = 'button' %}
+                  {% if section.settings.smart_payment_button %}
+                    {% assign cart_button_class = 'button--secondary' %}
+                  {% endif %}
+       
+          <div class="needhelp">Have a question?</div>
+          
+          
+        
+      </div>      </div>
+  
+                      
+<div class="mobilehidden maxwidthdesktop" > 
+                        <a href="#looxReviews">
+                    <div class="loox-rating" data-id="{{ product.id }}" data-rating="{{ product.metafields.loox.avg_rating }}" data-raters="{{ product.metafields.loox.num_reviews }}">
+                    </div>
+                  </a>
+  
+  <div class="centermobile">
+                    {% assign price_meta = product.selected_or_first_available_variant.price | divided_by: 100.00 %}
+                    <meta itemprop="price" content="{{ price_meta }}">
+
+                    {% if product.price > 0 %}
+                    <span class="compare-price money">{% if product.compare_at_price > product.price and product.available %}{{ product.compare_at_price | money }}{% endif %}</span>
+                    <span class="actual-price money">{{ product.price | money_without_trailing_zeros }}</span>
+                    {% endif %}
+  </div>
+      
+                
+            <p class="interest-free">Or 4 interest-free payments of {{ product.price | divided_by: 4 | money }} with <a href="https://sezzle.com/faq/shopper" target="_blank"><img src="{{ 'full-rgb-lg.png' | file_img_url: '200x' }}" style="padding-bottom: 4px; vertical-align: middle; width: 70px;"/></a> (U.S. customers only). <a href="#">Learn more.</a>
+                </p>
+          
+                <div class="custompaymenttop product-page--smart-payment-buttons">
+                  
+                                    {% assign cart_button_class = 'button' %}
+                  {% if section.settings.smart_payment_button %}
+                    {% assign cart_button_class = 'button--secondary' %}
+                  {% endif %}
+                  
+                  
+                <div class="product-page--smart-payment-buttons">
+                  {{ form | payment_button }}
+                </div>
+      
+                </div>
+      			
+      
+      </div>
+
+              
+          
+          <div class="cartcontainer">
+            <div class="hide-box"></div>
+                            <div class="floatwide mobilehidden">
+        <h1 class="producttitle">
+        {{ product.title }}
+      </h1>
+            
+            
+                  <div class="price-main">
+                    {% assign price_meta = product.selected_or_first_available_variant.price | money_without_trailing_zeros %}
+                    <meta itemprop="price" content="{{ price_meta }}">
+
+                    {% if product.price > 0 %}
+                    <span class="compare-price money">{% if product.compare_at_price > product.price and product.available %}{{ product.compare_at_price | money_without_trailing_zeros }}{% endif %}</span>
+                    <span class="actual-price money">{{ product.price | money_without_trailing_zeros }}</span>
+                    {% endif %}
+                  </div>
+                              
+                              
+                              <div class="needhelp mobilehidden">Have a question?</div>
+                                  
+   </div>
+            
+            {% if product.available == true %}
+            <div class="floatsmall">
+              
+              <div class="halfcolu">
+              <div class="coloropen">
+                 
+                
+                {% unless product.handle contains 'gift' %}
+                                {% assign curr_prod = product.title | downcase %}
+                {% assign color = product.title | split: ' / ' | last %}
+                <div class="float-custom small20 color-swatch{% if curr_prod == p_title %} selected{% endif %}" data-color="{{ color | handleize }}"></div>        
+                 
+		 <div class="float-custom small40 color-title">{% if product.title contains ' / ' %}{{ product.title | split: ' / ' | last }}{% endif %}</div>
+          <div class="arrowside arrow-color float-custom small10">
+                  <svg class="fw--icon fw--icon--expand-more" style="display: inline-block;">
+  <use xlink:href="#fw--icon--expand-more"></use>
+</svg>
+                </div>
+                <div class="color-selector">
+<!--                    <div class="header-color">Choose a color babe</div> -->
+                  {% assign related_prod = curr_prod | split:' / ' | first %}
+
+                  
+                  {% if related_prod contains 'aubrey' %}
+                    {% for product in collections['AUBREY'].products %}
+                      {% assign p_title = product.title | downcase %}
+                      {% if p_title contains related_prod %}
+                        {% assign color = product.title | split: ' / ' | last %}
+		<a class="color-swatch__link" href="{{ product.url }}" title="{% if product.title contains ' / ' %}{{ product.title | split: ' / ' | last }}{% endif %}">
+<div class="wrap-color">
+<span class="color-swatch{% if curr_prod == p_title %} selected{% endif %}" data-color="{{ color | handleize }}">
+</span>                  		
+
+<span class="color-name">{% if product.title contains ' / ' %}{{ product.title | split: ' / ' | last }}{% endif %}
+</span>
+</div>
+</a>
+
+                  		                  
+                  {% endif %}
+                    {% endfor %}
+                  {% elsif related_prod contains 'carter' %}
+                    {% for product in collections['CARTER'].products %}
+                      {% assign p_title = product.title | downcase %}
+                      {% if p_title contains related_prod %}
+                        {% assign color = product.title | split: ' / ' | last %}
+<a class="color-swatch__link" href="{{ product.url }}" title="{% if product.title contains ' / ' %}{{ product.title | split: ' / ' | last }}{% endif %}">
+<div class="wrap-color">
+<span class="color-swatch{% if curr_prod == p_title %} selected{% endif %}" data-color="{{ color | handleize }}">
+</span>                  		
+
+<span class="color-name">{% if product.title contains ' / ' %}{{ product.title | split: ' / ' | last }}{% endif %}
+</span>
+</div>
+</a>
+
+                      {% endif %}
+                    {% endfor %}
+                  {% elsif related_prod contains 'leo' %}
+                    {% for product in collections['LEO'].products %}
+                      {% assign p_title = product.title | downcase %}
+                      {% if p_title contains related_prod %}
+                        {% assign color = product.title | split: ' / ' | last %}
+<a class="color-swatch__link" href="{{ product.url }}" title="{% if product.title contains ' / ' %}{{ product.title | split: ' / ' | last }}{% endif %}">
+<div class="wrap-color">
+<span class="color-swatch{% if curr_prod == p_title %} selected{% endif %}" data-color="{{ color | handleize }}">
+</span>                  		
+
+<span class="color-name">{% if product.title contains ' / ' %}{{ product.title | split: ' / ' | last }}{% endif %}
+</span>
+</div>
+</a>
+
+                      {% endif %}
+                    {% endfor %}
+                  {% elsif related_prod contains 'harlow' %}
+                    {% for product in collections['HARLOW'].products %}
+                      {% assign p_title = product.title | downcase %}
+                      {% if p_title contains related_prod %}
+                        {% assign color = product.title | split: ' / ' | last %}
+<a class="color-swatch__link" href="{{ product.url }}" title="{% if product.title contains ' / ' %}{{ product.title | split: ' / ' | last }}{% endif %}">
+<div class="wrap-color">
+<span class="color-swatch{% if curr_prod == p_title %} selected{% endif %}" data-color="{{ color | handleize }}">
+</span>                  		
+
+<span class="color-name">{% if product.title contains ' / ' %}{{ product.title | split: ' / ' | last }}{% endif %}
+</span>
+</div>
+</a>
+
+                      {% endif %}
+                    {% endfor %}
+                  {% elsif related_prod contains 'robyn' %}
+                    {% for product in collections['ROBYN'].products %}
+                      {% assign p_title = product.title | downcase %}
+                      {% if p_title contains related_prod %}
+                        {% assign color = product.title | split: ' / ' | last %}
+<a class="color-swatch__link" href="{{ product.url }}" title="{% if product.title contains ' / ' %}{{ product.title | split: ' / ' | last }}{% endif %}">
+<div class="wrap-color">
+<span class="color-swatch{% if curr_prod == p_title %} selected{% endif %}" data-color="{{ color | handleize }}">
+</span>                  		
+
+<span class="color-name">{% if product.title contains ' / ' %}{{ product.title | split: ' / ' | last }}{% endif %}
+</span>
+</div>
+</a>
+
+                      {% endif %}
+                    {% endfor %}
+                  {% elsif related_prod contains 'johnson' %}
+                    {% for product in collections['JOHNSON'].products %}
+                      {% assign p_title = product.title | downcase %}
+                      {% if p_title contains related_prod %}
+                        {% assign color = product.title | split: ' / ' | last %}
+<a class="color-swatch__link" href="{{ product.url }}" title="{% if product.title contains ' / ' %}{{ product.title | split: ' / ' | last }}{% endif %}">
+<div class="wrap-color">
+<span class="color-swatch{% if curr_prod == p_title %} selected{% endif %}" data-color="{{ color | handleize }}">
+</span>                  		
+
+<span class="color-name">{% if product.title contains ' / ' %}{{ product.title | split: ' / ' | last }}{% endif %}
+</span>
+</div>
+</a>
+
+                      {% endif %}
+                    {% endfor %}
+                  {% elsif related_prod contains 'roy' %}
+                    {% for product in collections['ROY'].products %}
+                      {% assign p_title = product.title | downcase %}
+                      {% if p_title contains related_prod %}
+                        {% assign color = product.title | split: ' / ' | last %}
+<a class="color-swatch__link" href="{{ product.url }}" title="{% if product.title contains ' / ' %}{{ product.title | split: ' / ' | last }}{% endif %}">
+<div class="wrap-color">
+<span class="color-swatch{% if curr_prod == p_title %} selected{% endif %}" data-color="{{ color | handleize }}">
+</span>                  		
+
+<span class="color-name">{% if product.title contains ' / ' %}{{ product.title | split: ' / ' | last }}{% endif %}
+</span>
+</div>
+</a>
+
+                      {% endif %}
+                    {% endfor %}
+                  {% elsif related_prod contains 'kenzie' %}
+                    {% for product in collections['KENZIE'].products %}
+                      {% assign p_title = product.title | downcase %}
+                      {% if p_title contains related_prod %}
+                        {% assign color = product.title | split: ' / ' | last %}
+<a class="color-swatch__link" href="{{ product.url }}" title="{% if product.title contains ' / ' %}{{ product.title | split: ' / ' | last }}{% endif %}">
+<div class="wrap-color">
+<span class="color-swatch{% if curr_prod == p_title %} selected{% endif %}" data-color="{{ color | handleize }}">
+</span>                  		
+
+<span class="color-name">{% if product.title contains ' / ' %}{{ product.title | split: ' / ' | last }}{% endif %}
+</span>
+</div>
+</a>
+
+                      {% endif %}
+                    {% endfor %}
+                  {% elsif related_prod contains 'williams' %}
+                    {% for product in collections['WILLIAMS'].products %}
+                      {% assign p_title = product.title | downcase %}
+                      {% if p_title contains related_prod %}
+                        {% assign color = product.title | split: ' / ' | last %}
+<a class="color-swatch__link" href="{{ product.url }}" title="{% if product.title contains ' / ' %}{{ product.title | split: ' / ' | last }}{% endif %}">
+<div class="wrap-color">
+<span class="color-swatch{% if curr_prod == p_title %} selected{% endif %}" data-color="{{ color | handleize }}">
+</span>                  		
+
+<span class="color-name">{% if product.title contains ' / ' %}{{ product.title | split: ' / ' | last }}{% endif %}
+</span>
+</div>
+</a>
+
+                      {% endif %}
+                    {% endfor %}
+                  {% elsif related_prod contains 'trey' %}
+                    {% for product in collections['TREY'].products %}
+                      {% assign p_title = product.title | downcase %}
+                      {% if p_title contains related_prod %}
+                        {% assign color = product.title | split: ' / ' | last %}
+<a class="color-swatch__link" href="{{ product.url }}" title="{% if product.title contains ' / ' %}{{ product.title | split: ' / ' | last }}{% endif %}">
+<div class="wrap-color">
+<span class="color-swatch{% if curr_prod == p_title %} selected{% endif %}" data-color="{{ color | handleize }}">
+</span>                  		
+
+<span class="color-name">{% if product.title contains ' / ' %}{{ product.title | split: ' / ' | last }}{% endif %}
+</span>
+</div>
+</a>
+
+                      {% endif %}
+                    {% endfor %}
+                  {% elsif related_prod contains 'jordan' %}
+                    {% for product in collections['JORDAN'].products %}
+                      {% assign p_title = product.title | downcase %}
+                      {% if p_title contains related_prod %}
+                        {% assign color = product.title | split: ' / ' | last %}
+<a class="color-swatch__link" href="{{ product.url }}" title="{% if product.title contains ' / ' %}{{ product.title | split: ' / ' | last }}{% endif %}">
+<div class="wrap-color">
+<span class="color-swatch{% if curr_prod == p_title %} selected{% endif %}" data-color="{{ color | handleize }}">
+</span>                  		
+
+<span class="color-name">{% if product.title contains ' / ' %}{{ product.title | split: ' / ' | last }}{% endif %}
+</span>
+</div>
+</a>
+
+                      
+                  {% endif %}
+                    {% endfor %}
+                  {% elsif related_prod contains 'lanez' %}
+                    {% for product in collections['LANEZ'].products %}
+                      {% assign p_title = product.title | downcase %}
+                      {% if p_title contains related_prod %}
+                        {% assign color = product.title | split: ' / ' | last %}
+<a class="color-swatch__link" href="{{ product.url }}" title="{% if product.title contains ' / ' %}{{ product.title | split: ' / ' | last }}{% endif %}">
+<div class="wrap-color">
+<span class="color-swatch{% if curr_prod == p_title %} selected{% endif %}" data-color="{{ color | handleize }}">
+</span>                  		
+
+<span class="color-name">{% if product.title contains ' / ' %}{{ product.title | split: ' / ' | last }}{% endif %}
+</span>
+</div>
+</a>
+
+                      {% endif %}
+                    {% endfor %}
+                  {% elsif related_prod contains 'sanders' %}
+                    {% for product in collections['SANDERS'].products %}
+                      {% assign p_title = product.title | downcase %}
+                      {% if p_title contains related_prod %}
+                        {% assign color = product.title | split: ' / ' | last %}
+<a class="color-swatch__link" href="{{ product.url }}" title="{% if product.title contains ' / ' %}{{ product.title | split: ' / ' | last }}{% endif %}">
+<div class="wrap-color">
+<span class="color-swatch{% if curr_prod == p_title %} selected{% endif %}" data-color="{{ color | handleize }}">
+</span>                  		
+
+<span class="color-name">{% if product.title contains ' / ' %}{{ product.title | split: ' / ' | last }}{% endif %}
+</span>
+</div>
+</a>
+
+                      {% endif %}
+                    {% endfor %}
+                  {% elsif related_prod contains 'tank' or related_prod contains 'track' %}
+                    {% for product in collections['APPAREL'].products %}
+                      {% assign p_title = product.title | downcase %}
+                      {% if p_title contains related_prod %}
+                        {% assign color = product.title | split: ' / ' | last %}
+<a class="color-swatch__link" href="{{ product.url }}" title="{% if product.title contains ' / ' %}{{ product.title | split: ' / ' | last }}{% endif %}">
+<div class="wrap-color">
+<span class="color-swatch{% if curr_prod == p_title %} selected{% endif %}" data-color="{{ color | handleize }}">
+</span>                  		
+
+<span class="color-name">{% if product.title contains ' / ' %}{{ product.title | split: ' / ' | last }}{% endif %}
+</span>
+</div>
+</a>
+
+                      {% endif %}
+                    {% endfor %}
+                  {% else %}
+                    {% for product in collections.all.products %}
+                      {% assign p_title = product.title | downcase %}
+                      {% if p_title contains related_prod %}
+                        {% assign color = product.title | split: ' / ' | last %}
+<a class="color-swatch__link" href="{{ product.url }}" title="{% if product.title contains ' / ' %}{{ product.title | split: ' / ' | last }}{% endif %}">
+<div class="wrap-color">
+<span class="color-swatch{% if curr_prod == p_title %} selected{% endif %}" data-color="{{ color | handleize }}">
+</span>                  		
+
+<span class="color-name">{% if product.title contains ' / ' %}{{ product.title | split: ' / ' | last }}{% endif %}
+</span>
+</div>
+</a>
+
+</div>
+                      {% endif %}
+                    {% endfor %}
+                  {% endif %}
+
+                </div>
+
+              {% endunless %}</div>
+              
+               
+              
+              </div>
+ <div class="halfcolu-size">
+              <div class="sizeopen"><div class="float-custom small40 color-title" id="log"></div>
+                
+                
+                          
+    {% unless product.metafields.onesize.OS1 == blank %}
+            <div class="float-custom small40 color-title" id="log">OS</div>
+  	{% endunless %}
+  
+                <div class="arrowside arrow-size float-custom small10">
+                  <svg class="fw--icon fw--icon--expand-more" style="display: inline-block;">
+  <use xlink:href="#fw--icon--expand-more"></use>
+</svg>
+                </div>
+                </div>
+
+
+              <span class="selector-toggle {% unless product.variants.size > 1 %}hide-for-all{% endunless %}">
+                <select name="id" id="product-select-{{ product.id }}">
+                  {% for variant in product.variants %}
+                    <option data-sku="{{ variant.sku }}" {% if variant.inventory_quantity <= 0 and variant.available == false %}DISABLED {% endif %}{% if variant == product.selected_or_first_available_variant %}selected="selected" {% endif %} value="{{ variant.id }}">{{ variant.title }} - {{ variant.price | money }}</option>
+                  {% endfor %}
+                </select>
+                {% if product.variants.size > 1 %}
+                	{% include 'swatch' with 'Size' %}
+                {% endif %}
+              </span>
+
+              {% assign variant = product.selected_or_first_available_variant %}
+
+              <span class="{% unless product.available %} disabled{% endunless %}">
+                <input type="hidden" name="quantity" value="1">
+              </span>
+            
+                </div>
+              
+              
+              
+             
+            </div>
+            
+            {% endif %}
+            
+         <div class="holder-product hidden-notify">
+    			<div class="custom-notified-button">
+                  <a href="#" class="button--secondary get-notified show--large" style="">Get Notified</a>
+               </div>
+            </div>
+          
+              {% if variant.inventory_quantity <= 50 and variant.inventory_quantity > 0 %}
+              <div class="product-page-cart--low-in-stock text-align--center color--important">
+                <span>{{ section.settings.low_stock_message }}</span>
+              </div>
+
+<!--                 <span class="sold-out font--accent font--subheading--size color--important button--secondary">{{ 'collections.sold_out_html' | t }}</span> -->
+ 			 
+                {% elsif product.available == false %}
+                {% unless product.metafields.coming.soon == blank %}
+            <div class="holder-product">
+                  <div class="soldout-comingsoon">
+				Coming soon</div>
+    			<div class="notified-button">
+                  <a href="#" class="button--secondary get-notified show--large" style="">Get Notified</a>
+               </div>
+            </div>
+                {% else %}
+            <div class="holder-product">
+                <div class="soldout-comingsoon">{{ 'products.sold_out.product' | t }}</div>
+               <div class="notified-button">
+               <a href="#" class="button--secondary get-notified show--large" style="">Get Notified</a>
+               </div>
+            </div>
+                {% endunless %}
+   				 {% endif %}
+              
+              
+             
+              <span class="{% unless product.available %} disabled{% endunless %}">
+				</span>
+                {% if template contains 'kickstarter' %}
+                  <a href="{{ settings.social--kickstarter--url }}" class="button"><span class="text">{{ 'products.back_on_kickstarter' | t }}</span></a>
+                {% else %}
+
+                  {% assign cart_button_class = 'button' %}
+                  {% if section.settings.smart_payment_button %}
+                    {% assign cart_button_class = 'button--secondary' %}
+                  {% endif %}
+
+                  {% if product.available %}
+                  <div class="floatbutton addtocartmobile text-align--center">
+                    <button class="limitwidth add {{ cart_button_class }}" type="submit" name="add" id="add"><span class="text">{{ 'products.add_to_cart' | t }}</span><span class="fw--loading_animation tiny" data-js-class="FrameworkLoadingAnimation"></span></button>
+                  {% endif %}
+                {% endif %}
+
+        {% endform %}
+        
+        <div class="close-form text-align--right">Close</div>
+      </div>
+
+      
+
+    </div>
+  </div>
+
+{% else %} {% comment %} Grid or Collage View{% endcomment %}
+
+  <div class="product--root">
+    <div class="partial--product view--{{ view }} index--{{ odd_or_even }}{% if has_hover %} has-hover{% endif %}" data-view="{{ view }}">
+      <div class="product--image-wrapper">
+        <div class="product--image">
+          <a class="image-wrapper" href="{{ product.url | within: collection  }}" title="{{ product.title }}">
+            {% include "framework--image", image: product.featured_image, full_width: true %}
+            
+          </a>
+        </div>
+      </div>
+
+      <div class="caption">
+        <a href="{{ product.url | within: collection  }}" title="{{ product.title }}">
+          <h2 class="title font--subheading">
+            {{ product.title }}
+          </h2>
+        </a>
+
+        {% if section.settings.show-vendor %}
+          {% assign product_vendor_handle = product.vendor | handle %}
+          {% if collections[product_vendor_handle].handle == product_vendor_handle %}
+            {% assign vendor_url = collections[product_vendor_handle].url %}
+          {% else %}
+            {% assign vendor_url = product.vendor | url_for_vendor %}
+          {% endif %}
+          <p class="vendor">{{ product.vendor | link_to: vendor_url }}</p>
+        {% endif %}
+
+        <a href="{{ product.url | within: collection  }}" title="{{ product.title }}">
+          <p class="price font--accent">
+            {% if product.price > 0 %}
+              {% if product.compare_at_price > product.price and product.available %}
+                <span class="compare-price money">{{ product.compare_at_price | money_without_trailing_zeros }}</span>
+                <span class="actual-price money">{{ product.price | money_without_trailing_zeros }}</span>
+              {% else %}
+                {% if product.price_varies %}{{ 'collections.from' | t }}{% endif %} <span class="actual-price money">{{ product.price | money_without_trailing_zeros }}</span>
+              {% endif %}
+            {% endif %}
+             
+            
+          </p>
+        </a>
+      </div>
+      
+      {% if odd_or_even == 'even' %}
+        <a class="show--medium-large" href="{{ product.url | within: collection  }}" title="{{ product.title }}">
+          {% if has_hover %}
+            <img src="{{ product.images[1] | product_img_url: 'grande' }}" alt="{{ product.images[1].alt | escape }}" class="hover-image fw--align--center" />
+          {% endif %}
+
+          <img src="{{ product.featured_image.src | product_img_url: 'grande' }}" alt="{{ product.featured_image.alt | escape }}" />
+        </a>
+      {% endif %}
+
+    </div>
+  </div>
+{% endif %}
+    
+    <style>
+      .cartcontainer {
+        display:none;
+      }
+      
+    </style>

@@ -1,0 +1,890 @@
+<style>
+{% for block in section.blocks %}
+  {% assign color =  block.settings.color %}
+  {% assign name =  block.settings.name | downcase %}
+  .color-swatch[data-color="{{ name }}"] {
+    background-color: {{ color }};
+  {% if block.settings.use_image and block.settings.swatch_image != blank %}
+    background-color: transparent;
+  background-image: url('{{ block.settings.swatch_image | img_url: '50x' }}');
+  background-size: cover;
+  {% endif %}
+  }
+{% endfor %}
+</style>
+
+{% assign source = 'Product - ' | append: product.title %}
+<div
+  data-section-id="{{ section.id }}"
+  data-section-type="product_page"
+  data-js-class="ProductPage"
+  class="product_page--thumbnails-custom"
+>
+  
+<!--         <div class="fixedbottom"><button type="submit" name="checkout" class="button checkout font--accent">{{ 'cart.checkout' | t }}</button></div>
+ -->
+  
+
+
+  
+  
+  
+  {% unless product.available %}
+<div id="sold-out">
+  {% form 'contact' %}
+    {% if form.posted_successfully? %}
+    <p class="accent-text">Thanks! We will notify you when this product becomes available!</p>
+    {% else %}
+    <p>Click <a id="notify-me" href="#"><strong>here</strong></a> to be notified by email when {{ product.title }} becomes available.</p>
+    {% endif %}
+    {% if form.errors %}
+    <div class="error feedback accent-text">
+      <p>Please provide a valid email address.</p>
+    </div>
+    {% endif %}
+    {% unless form.posted_successfully? %}
+    <div id="notify-me-wrapper" class="clearfix" style="display:none">
+      {% if customer %}
+      <input type="hidden" name="contact[email]" value="{{ customer.email }}" />
+      {% else %}
+      <input style="float:left; width:180px;" required="required" type="email" name="contact[email]" placeholder="your@email.com" class="styled-input{% if form.errors contains 'email' %} error{% endif %}" value="{{ contact.fields.email }}" />
+      {% endif %}
+      <input type="hidden" name="contact[body]" value="Please notify me when {{ product.title | escape }} becomes available." />
+      <input style="float:left; margin-left:5px;" class="btn styled-submit" type="submit" value="Send" />
+    </div>
+    {% endunless %}
+  {% endform %}
+</div>
+{% endunless %}
+  
+<ul id="lightSlider">
+  
+{% for image in product.images offset:0 limit:1 %}
+  <li class="sliderimg"><img src="{{ image.src | product_img_url: '500x' }}"></li>
+{% endfor %}
+  
+        
+
+    {% unless product.metafields.video.url == blank %}            
+      <li class="sliderimg"> 
+    <video class="videomobile mobilehidden" id="videomobile" playsinline autoplay loop muted>
+		<source src="{{ product.metafields.video.url }}" type="video/mp4">
+	</video>
+        
+           <div class="relativecontain">
+        <div class="mobileonly absolute1"> 
+        <picture class="videomobile mobileonly">
+  <source type="video/mp4" srcset="{{ product.metafields.video.url }}" playsinline autoplay loop muted>
+
+  <img src="{{ product.metafields.video.url }}">
+</picture>
+        </div> </div>
+        
+        <div class="relativecontain">
+        
+        <div class="mobileonly absolute2"> 
+            <video class="videomobile" id="videomobile" playsinline autoplay loop muted>
+		<source src="{{ product.metafields.video.url }}" type="video/mp4">
+	</video>
+        </div>
+           </div>
+        
+               </li>
+  	{% endunless %}
+ 
+          
+          
+  {% for image in product.images offset:1 limit:1 %}
+  <li class="sliderimg"><img src="{{ image.src | product_img_url: '500x' }}"></li>
+{% endfor %}
+  
+    {% for image in product.images offset:2 limit:1 %}
+  <li class="sliderimg"><img src="{{ image.src | product_img_url: '500x' }}"></li>
+{% endfor %}
+         
+  
+    {% for image in product.images offset:3 limit:1 %}
+  <li class="sliderimg"><img src="{{ image.src | product_img_url: '500x' }}"></li>
+{% endfor %}
+  
+  
+    {% for image in product.images offset:4 limit:1 %}
+  <li class="sliderimg"><img src="{{ image.src | product_img_url: '500x' }}"></li>
+{% endfor %}
+  
+  
+    {% for image in product.images offset:5 limit:1 %}
+  <li class="sliderimg"><img src="{{ image.src | product_img_url: '500x' }}"></li>
+{% endfor %}
+        
+        
+        </ul>  
+        
+  
+  {% if section.settings.enable-modal %}
+  <div class="modal--root" data-js-class="FrameworkModal">
+  {% endif %}
+    <div class="product fw--blocks hiddenarea">
+
+      {% capture featured_image_classes %}
+        featured-image
+        text-align--center
+        {% if settings.bg-color--body == settings.bg-color--panel %} same-color{% endif %}
+      {% endcapture %}
+
+          
+
+         
+
+      {% capture add_to_cart_panel_classes %}
+        add-to-cart-panel
+        {% if settings.bg-color--body == settings.bg-color--panel %}{% endif %}{% comment %} Removed 'same-color' class {% endcomment %}
+       {% if product.available == false %} product__sold-out{% endif %}
+      {% endcapture %}
+
+    
+        {% include 'partial--product' with 'product-page' %}
+      
+          
+<!--             <div class="buyareamain"> 
+              
+
+                </div> -->
+      
+      <div class="content spacing--5y fw--blocks mobilehidden">
+        
+        <div class="column product-details show--medium-large">
+          <div class="product-details__column product-details__column-left text-align--left" style="width: 50%; float: left; padding-right: 15px;">
+            {% if product.description contains '<!-- features -->' %}
+            {% assign feat_onward = product.description | split: '<!-- features -->' | last %}
+            {% assign feat = feat_onward | split: '<!-- size -->' | first %}
+              <div class="show--medium">
+              	{{ feat }}
+              </div>
+            {% endif %}
+            
+            {% if product.description contains '<!-- size -->' %}
+            {% assign size_onward = product.description | split: '<!-- size -->' | last %}
+            {% assign size_and_fit = size_onward | split: '<!-- material -->' | first %}
+            {{ size_and_fit }}
+            {% endif %}
+            
+            <div class="sizing-guide-link">
+              <a class="open-sizing-guide" href="#sizing-guide">{{ 'products.size_guide' | t }}</a>
+            </div>
+
+            {% if product.description contains '<!-- material -->' %}
+            {% assign materials_onward = size_onward | split: '<!-- material -->' | last %}
+            {% assign materials = materials_onward | split: '<!-- split -->' | first %}
+            {{ materials }}
+            {% endif %}
+
+          </div>
+
+          <div class="product-details__column product-details__column-left text-align--left" style="width: 50%; float: right; padding-left: 15px;">
+
+            <h4>SHIPPING</h4>
+			<p>We offer free shipping on all orders over $100 USD. Please see check-out for the specific rate to your location. Orders will be packed within 3-4 days of purchasing. Shipping time is dependent on location.</p>
+            
+            <div class="shipping-guide-link">
+              <a class="open-shipping-guide" href="#shipping-guide">View our shipping chart</a>
+            </div>
+            
+            <div class="return-policy_wrapper">
+              <h4 class="return-policy">RETURNS</h4>
+              <p>We accept returns of unworn suits for store credit.</p>
+              <a class="return-policy-link" href="/pages/shipping" target="_blank" rel="noopener">View our return policy</a>
+            </div>
+            
+          </div>
+        </div>
+        
+        <div class="column left-side width--6"></div>
+        <div class="column right-side width--6"></div>
+
+        
+        
+          {% comment %}
+
+          {% assign show_mailing_list = section.settings.show-mailing-list %}
+            
+          {% for image in product.images %}
+            {% assign skip_image = false %}
+
+            {% if forloop.first %}
+              {% assign skip_image = true %}
+            {% endif %}
+
+            {% if section.settings.hide-variant-images and forloop.first == false %}
+              {% for variant in product.variants %}
+                {% if variant.image.src == image.src %}
+                  <a class="photo image-wrapper hidden-variant-image">
+                    <div class="product-page--image" data-image-id="{{ image.id }}">
+                      {% include 'framework--image', image: image, max_height: 600 %}
+                    </div>
+                  </a>
+                  {% assign skip_image = true %}
+                  {% break %}
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+
+            {% if skip_image %}
+              {% continue %}
+            {% endif %}
+
+            <a tabindex="0" class="block photo image-wrapper {% if section.settings.enable-modal %}modal--link{% endif %}">
+              <div class="product-page--image" data-image-id="{{ image.id }}">
+                {% include 'framework--image', image: image, max_height: 600 %}
+              </div>
+            </a>
+
+            {% if forloop.index == 3 and show_mailing_list %}
+              <div class="block">
+                <div class="">
+                  {% include 'partial--mailing-list' with source %}
+                  {% assign show_mailing_list = false %}
+                </div>
+              </div>
+            {% endif %}
+
+          {% endfor %}
+          
+          {% endcomment %}
+          
+
+          {% if show_mailing_list %}
+            <div class="block">
+              <div class="">
+                {% include 'partial--mailing-list' with source %}
+              </div>
+            </div>
+          {% endif %}
+          
+        </div>
+        
+        {% comment %}
+        <div class="extra-image-carousel fw--slider show--small-medium"
+             data-navigation="true"
+             data-pagination="false"
+             data-pagination-numbers="false">
+          {% for image in product.images %}
+          {% if forloop.first %}
+          {% continue %}
+          {% endif %}
+          <div class="product-page--image slide" data-image-id="{{ image.id }}">
+            {% include 'framework--image', image: image, max_height: 600 %}
+          </div>
+          {% endfor %}
+        </div>
+        {% endcomment %}
+        
+      </div>
+
+      {% if settings.social--sharing-products %}
+        <div class="text-align--center">
+          {% include 'partial--social-media' with 'product' %}
+        </div>
+        <div class="clearfix"></div>
+      {% endif %}
+    </div>
+
+  {% if section.settings.enable-modal %}
+    <div class="modal--content-wrapper">
+      {% for image in product.images %}
+        <div class="modal--content">
+          <div class="product-page--image" data-image-id="{{ image.id }}">
+            {% include 'framework--image', image: image %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div> {% comment %} /.modal--root {% endcomment %}
+  {% endif %}
+<!-- <div class="header text-align--center spacing--4y">
+      <a href="/collections/best-sellers" target="_self"><h3 class="font--heading mobilehidden">PHOTOS</h3></a>
+    </div> -->
+ 
+
+  
+  
+          
+  
+  
+      
+  <div class="content spacing--5y fw--blocks">
+        
+        <div class="column product-details show--medium-large">
+          <div class="product-details__column product-details__column-left text-align--left" style="width: 50%; float: left; padding-right: 15px;">
+            {% if product.description contains '<!-- features -->' %}
+            {% assign feat_onward = product.description | split: '<!-- features -->' | last %}
+            {% assign feat = feat_onward | split: '<!-- size -->' | first %}
+              <div class="show--medium">
+              	{{ feat }}
+              </div>
+            {% endif %}
+            
+            {% if product.description contains '<!-- size -->' %}
+            {% assign size_onward = product.description | split: '<!-- size -->' | last %}
+            {% assign size_and_fit = size_onward | split: '<!-- material -->' | first %}
+            {{ size_and_fit }}
+            {% endif %}
+            
+            <div class="sizing-guide-link">
+              <a class="open-sizing-guide" href="#sizing-guide">{{ 'products.size_guide' | t }}</a>
+            </div>
+
+            {% if product.description contains '<!-- material -->' %}
+            {% assign materials_onward = size_onward | split: '<!-- material -->' | last %}
+            {% assign materials = materials_onward | split: '<!-- split -->' | first %}
+            {{ materials }}
+            {% endif %}
+
+          </div>
+
+          <div class="product-details__column product-details__column-left text-align--left" style="width: 50%; float: right; padding-left: 15px;">
+
+ <h4>SHIPPING</h4>
+			<p>We offer free shipping on all orders over $100 USD. Please see check-out for the specific rate to your location. Orders will be packed within 3-4 days of purchasing. Shipping time is dependent on location.</p>
+            
+            <div class="shipping-guide-link">
+              <a class="open-shipping-guide" href="#shipping-guide">View our shipping chart</a>
+            </div>
+            
+            <div class="return-policy_wrapper">
+              <h4 class="return-policy">RETURNS</h4>
+              <p>We accept returns of unworn suits for store credit.</p>
+              <a class="return-policy-link" href="/pages/shipping" target="_blank" rel="noopener">View our return policy</a>
+            </div>
+            
+          </div>
+        </div>
+        
+        <div class="column left-side width--6"></div>
+        <div class="column right-side width--6"></div>
+
+        <div class="single-column text-align--center">
+          {% comment %} Edited by Craig R {% endcomment %}
+          <div class="block text text-align--left show--small">
+            <div class="description rte-content" itemprop="description">
+              {% if product.description contains '<!-- material -->' %}
+                {% assign before_materials = product.description | split: '<!-- material -->' | first %}
+                {% assign materials_onward = product.description | split: '<!-- material -->' | last %}
+                {% assign materials = materials_onward | split: '<!-- split -->' | first %}
+              
+                {{ before_materials }}
+              
+                <div class="sizing-guide-link">
+                  <a class="open-sizing-guide" href="#sizing-guide">{{ 'products.size_guide' | t }}</a>
+                </div>
+              
+                {{ materials }}
+              
+              {% else %}
+                {{ product.description | split: '<!-- split -->' | first }}
+              {% endif %}
+              
+            </div>
+            
+            <div class="product-details__column">
+            <h4>SHIPPING</h4>
+			<p>We offer free shipping on all orders over $100 USD. Please see check-out for the specific rate to your location. Orders will be packed within 3-4 days of purchasing. Shipping time is dependent on location.</p>
+            
+            <div class="shipping-guide-link">
+              <a class="open-shipping-guide" href="#shipping-guide">View our shipping chart</a>
+            </div>
+            
+            <div class="return-policy_wrapper">
+              <h4 class="return-policy">RETURNS</h4>
+              <p>We accept returns of unworn suits for store credit.</p>
+              <a class="return-policy-link" href="/pages/shipping" target="_blank" rel="noopener">View our return policy</a>
+              
+            </div>
+          </div>
+          
+    </div>
+    
+
+  
+ 
+          
+          
+          
+    {% unless product.metafields.product.largeimage == blank %}
+            <div class="large-prod-img"><img src="{{ product.metafields.product.largeimage }}" /></div>
+  	{% endunless %}
+  
+
+ <div class="header text-align--center spacing--4y" style="
+    padding-bottom: 20px;
+">
+      <a href="/collections/best-sellers-1" target="_self"><h3 class="font--heading">SEEN ON IG</h3></a>
+    </div>
+          
+          
+              {% unless product.metafields.instagram.one == blank %}	
+   
+    <div class="instagram-media first-ig">
+        
+     <div class="inf-btn">
+       <a class="influencer-link mobilehidden" target="_blank" href="https://instagram.com/p/{{ product.metafields.instagram.one }}">
+         <div class="influencer-btn line23">
+              CLICK TO VIEW IG POST
+       </div>
+       </a>
+      </div>
+      <a class="nohover" target="_blank" href="https://instagram.com/p/{{ product.metafields.instagram.one }}">
+      <img src="https://instagram.com/p/{{ product.metafields.instagram.one }}/media/?size=l" />
+   </a>
+    </div>
+ 
+    
+      
+  	{% endunless %}
+          
+                        {% unless product.metafields.instagram.two == blank %}
+        
+        <div class="instagram-media">
+           
+     <div class="inf-btn">
+       <a class="influencer-link mobilehidden" target="_blank" href="https://instagram.com/p/{{ product.metafields.instagram.two }}">
+         <div class="influencer-btn line23">
+              CLICK TO VIEW IG POST
+       </div>
+       </a>
+      </div>
+          <a class="nohover" target="_blank" href="https://instagram.com/p/{{ product.metafields.instagram.two }}">
+      <img src="https://instagram.com/p/{{ product.metafields.instagram.two }}/media/?size=l" />
+            </a>  
+    </div>
+
+    
+  	{% endunless %}
+          
+          
+                        {% unless product.metafields.instagram.three == blank %}
+         
+             <div class="instagram-media">
+               
+               <div class="inf-btn">
+       <a class="influencer-link mobilehidden" target="_blank" href="https://instagram.com/p/{{ product.metafields.instagram.three }}">
+         <div class="influencer-btn line23">
+              CLICK TO VIEW IG POST
+       </div>
+       </a>
+      </div>
+  <a class="nohover" target="_blank" href="https://instagram.com/p/{{ product.metafields.instagram.three }}">
+      <img src="https://instagram.com/p/{{ product.metafields.instagram.three }}/media/?size=l" />
+ </a>
+    </div>
+   
+    
+  	{% endunless %}
+          
+          
+    
+                        {% unless product.metafields.instagram.three == blank %}
+        
+             <div class="instagram-media">
+                
+               <div class="inf-btn">
+       <a class="influencer-link mobilehidden" target="_blank" href="https://instagram.com/p/{{ product.metafields.instagram.four }}">
+         <div class="influencer-btn line23">
+              CLICK TO VIEW IG POST
+       </div>
+       </a>
+      </div>
+    <a class="nohover" target="_blank" href="https://instagram.com/p/{{ product.metafields.instagram.four }}">
+      <img src="https://instagram.com/p/{{ product.metafields.instagram.four }}/media/?size=l" />
+    </a>
+    </div>
+
+
+    
+  	{% endunless %}
+  
+  {% if section.settings.show-related-collection %}
+    {% include 'template--product--related-collection' %}
+  {% endif %}
+  
+  <!--  Apply default size charts  -->
+  {% if product.handle contains 'jordan' or product.handle contains 'trey' or product.handle == 'leo' %}
+    {% assign size_chart = 'SIZE A B C D/DD|32 S S M L|34 S S M L|36 S M M/L L|38 S M M/L L' %}
+  	{% assign size_chart_2 = 'SIZE S M L|US 00-2 4-6 32-34|UK 4-6 8-10 36-38|EU 8-12 12-16 40-44' %}
+  {% elsif product.handle contains 'bottom' %}
+    {% assign size_chart = 'SIZE WAIST(IN) WAIST(CM) HIPS(IN) HIPS(CM)|XS 23-25 58-64 30-32 76-81|S 25-27 64-69 32-34 81-86|M 27-29 69-74 34-36 86-91|L 29-31 74-79 36-39 91-99|XL 31-33 79-84 39-41 99-104' %}
+    {% assign size_chart_2 = 'SIZE NA UK/AU EU|XS 0-2 4-6 32-34|S 2-4 6-8 36|M 6-8 10-12 38-40|L 10-12 12-14 42-44|XL 14-16 14 44' %}
+  {% elsif product.handle contains 'track-short' %}
+    {% assign size_chart = 'SIZE US UK BUST WAIST HIPS|S 2-4 6-8 85 65 95|M 4-6 8-10 90 70 100|L 8-10 12-14 95 75 105' %}
+  {% elsif product.handle contains 'track' %}
+    {% assign size_chart = 'SIZE US UK BUST WAIST HIPS PANT|S 2-4 6-8 85 65 95 98|M 4-6 8-10 90 70 100 101|L 8-10 12-14 95 75 105 104' %}
+  {% elsif product.handle contains 'top' %}
+    {% assign size_chart = 'SIZE A B C D DD|32 XS/S XS/S S M M|34 XS/S S M M L|36 S M L L L/XL|38 M M/L L L L/XL' %}
+    {% assign size_chart_2 = 'SIZE NA UK/AU EU|XS 0-2 4-6 32-34|S 2-4 6-8 36|M 6-8 10-12 38-40|L 10-12 12-14 42-44|XL 14-16 14 44' %}
+  {% else %}
+  	{% assign size_chart = 'SIZE A B C D DD|32 XS/S XS/S S M M|34 XS/S S M M L|36 S M L L L/XL|38 M M/L L L L/XL' %}
+  	{% assign size_chart_2 = 'SIZE WAIST(IN) WAIST(CM) HIPS(IN) HIPS(CM)|XS 23-25 58-64 30-32 76-81|S 25-27 64-69 32-34 81-86|M 27-29 69-74 34-36 86-91|L 29-31 74-79 36-39 91-99|XL 31-33 79-84 39-41 99-104' %}
+  {% endif %}
+  
+  <!--  Overide with product size charts if present  -->
+  {% if product.metafields.sizing.standard != blank %}
+    {% assign size_chart = product.metafields.sizing.standard %}
+  {% endif%}
+  
+  {% if product.metafields.sizing.international != blank %}
+    {% assign size_chart_2 = product.metafields.sizing.international %}
+  {% endif%}
+  
+  {% include 'size-guide-modal' %}
+  {% include 'shipping-guide-modal' %}
+
+
+</div>
+
+
+
+
+<script>
+  theme.product = {};
+  theme.product.json = {{ product | json }};
+  theme.product.id = {{ product.id }};
+
+  var selectCallback = function(variant, selector) {
+    theme.partials.ProductPage.variantSelected(variant, selector);
+    // add your selectCallback code here...
+    // BEGIN SWATCHES
+    if (variant) {
+      var form = jQuery('#' + selector.domIdPrefix).closest('form');
+      for (var i=0,length=variant.options.length; i<length; i++) {
+        var radioButton = form.find('.swatch[data-option-index="' + i + '"] :radio[value="' + variant.options[i] +'"]');
+        if (radioButton.size()) {
+          radioButton.get(0).checked = true;
+        }
+      }
+    }
+    // END SWATCHES
+    
+    // Currency converter call for after prices are updated
+    // Currency.convertAll(shopCurrency, jQuery('[name=currencies]').val(), '.partial--product span.money');
+    // jQuery('.selected-currency').text(Currency.currentCurrency);
+    
+  };
+
+  jQuery(function($) {
+    new Shopify.OptionSelectors('product-select-' + theme.product.id, {
+      product: theme.product.json,
+      onVariantSelected: selectCallback,
+      enableHistoryState: true
+    });
+
+    {% if product.options.size == 1 %}
+      $('.selector-wrapper:eq(0)').prepend('<label>{{ product.options.first }}</label>');
+    {% endif %}
+  });
+
+</script>
+
+<script>
+  var acc = document.getElementsByClassName("accordion");
+  var i;
+
+  for (i = 0; i < acc.length; i++) {
+    acc[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      var panel = this.nextElementSibling;
+      if (panel.style.maxHeight){
+        panel.style.maxHeight = null;
+      } else {
+        panel.style.maxHeight = panel.scrollHeight + "px";
+      } 
+    });
+  }
+  
+  jQuery(function($) {
+    $(document).ready(function() {
+      const $slider = $('.extra-image-carousel');
+      $slider.owlCarousel({
+        center: true,
+        singleItem: true,
+        loop:true,
+        margin:10,
+        slideSpeed: 800
+      });
+      const addSymbol = function(icon_name) {
+        return '<svg class="fw--icon fw--icon--' + icon_name + '"> <use xlink:href="#fw--icon--' + icon_name + '" /> </svg>';
+      };
+      $slider.find('.owl-prev').html(addSymbol('chevron-left'));
+      $slider.find('.owl-next').html(addSymbol('chevron-right'));      
+      
+    });
+  });
+  
+  
+  // thumnail swapping script
+
+  jQuery(function($) {
+    $(document).ready(function() {
+      
+      const product = $('.product');
+      
+      $(".product_page--thumbnails-custom .image-wrapper").click(function() { 
+        
+        if ( $(this)[0].children[0].classList.contains('active') ) {
+          console.log('active element!');
+          return;
+          
+        } else {
+          $(".product_page--thumbnails-custom .image-wrapper .product-page--image").removeClass('active');
+          $(this)[0].children[0].classList.add('active');
+          const main_image = product.find('.product-page--featured-image > .product-page--image img');
+          const main_image_width = main_image.width();
+          const new_main_image = $(this).find('.product-page--image img');
+          new_main_image.attr('sizes', main_image_width + 'px'); 
+
+          function replaceWithThumbnail(main, thumbnail) {
+            let thumb_clone;
+            thumb_clone = thumbnail.clone();
+            main.replaceWith(thumb_clone);
+          };
+
+          replaceWithThumbnail(main_image, new_main_image);
+          
+        }
+        
+      });  
+      
+    });
+    
+  });
+
+  $(".coloropen").click(function(){
+    $(".color-selector").toggle();
+    $(".swatch").hide();
+    $(".arrow-color").toggleClass('rotate-arrow');
+  });
+  $(".sizeopen").click(function(){
+    $(".swatch").toggle();
+    $(".color-selector").hide();
+//     $(".hide-box").show();
+    $(".arrow-size").toggleClass('rotate-arrow');
+  });
+ 
+  
+  $(".hide-box, .test-contain, .sliderimg, .lightSlider, .maxwidthdesktop, .font--heading, .related-collection, .grid-wrap").click(function(){
+    $(".swatch").hide();
+    $(".color-selector").hide();
+    $(".arrow-size").removeClass('rotate-arrow');
+    $(".arrow-color").removeClass('rotate-arrow');
+  }); 
+
+  $(".mobilehidden").click(function(){
+    $(".swatch").hide();
+    $(".color-selector").hide();
+    $(".arrow-size").removeClass('rotate-arrow');
+    $(".arrow-color").removeClass('rotate-arrow');
+  }); 
+  
+  $( "#videomobile" ).click();
+  
+    $("#videomobile").click(function(){
+     $("#videomobile")[0].play();
+  }); 
+  
+      $(".swatch-element").click(function(){
+    $(".swatch").hide();
+  }); 
+  
+    $(".notified-button, .close-form").click(function(){
+    $("#esc-oos-form").toggle();
+    $(".close-form").toggle();
+      
+  }); 
+
+  
+//       $(".close-form").click(function(){
+//     $("#esc-oos-form").toggle();
+//     $(".close-form").toggle();
+      
+//   }); 
+  
+  
+  
+// if ($('#swatch-0-small').is(':checked')) {
+//   $( "#log" ).html( $( "#swatch-0-small:checked" ).val(.slice(0,1)) + "" );
+// });
+  
+
+
+    $(".limitwidth").click(function(){
+    $(".fixedbottom").delay(1200).show(0);
+//     $(".hiddenform").hide(1500);
+	$(".modal-holder").addClass("animted slideInLeft");
+  });
+    $(".modal--mask").click(function(){
+    $(".fixedbottom").delay(0).hide(0);
+  });  
+  
+  
+   
+    
+
+    $('.test-contain > h4:contains("Size & Fit")').next().addClass('sizeandfit');
+   $('.description > h4:contains("Size & Fit")').next().addClass('sizeandfit2');
+
+$('ul.sizeandfit li:gt(3)').hide();
+  
+$('.sizeandfit').append('<li id="showmore" class="showmoreitems">+ Show More</li>').find('li:last').click(function() {
+  $(this).siblings(':gt(3)').toggle();
+              $(this).text(function(i, v){
+               return v === '+ Show More' ? '- Show Less' : '+ Show More'
+            })
+});
+  
+  
+  $('ul.sizeandfit2 li:gt(2)').hide();
+  
+$('.sizeandfit2').append('<li id="showmore" class="showmoreitems">+ Show More</li>').find('li:last').click(function() {
+  $(this).siblings(':gt(2)').toggle();
+              $(this).text(function(i, v){
+               return v === '+ Show More' ? '- Show Less' : '+ Show More'
+            })
+});
+
+  
+    $(".showmoreitems").click(function(){
+$(".return-policy-link").text("View our return policy");
+  });
+  
+ 
+
+  
+//   $( "#swatch-0-small" ).on( "click", function() {
+//   $( "#log" ).html( $( "#swatch-0-small:checked" ).val());
+// });
+  
+//    $( "#swatch-0-medium" ).on( "click", function() {
+//   $( "#log" ).html( $( "#swatch-0-medium:checked" ).val() + "" );
+// });
+  
+//    $( "#swatch-0-large" ).on( "click", function() {
+//   $( "#log" ).html( $( "#swatch-0-large:checked" ).val() + "" );
+// });
+  
+  $(document).ready(function(){    
+    $(".swatch-element label").each(function(index, element) {
+    element.addEventListener('click', function() {
+      console.log(element)
+      $("#log").html(element.innerText);
+    })
+    
+    
+    $(".swatch-element.available label").first().click()
+    
+  
+  })}) 
+  
+  
+  
+
+  
+  
+  
+</script>
+
+
+<script>
+  function myFunction() {
+  var x = document.getElementById("showmore");
+  if (x.innerHTML === "+ Show More") {
+    x.innerHTML = "- Show Less";
+  } else {
+    x.innerHTML = "+ Show More";
+  }
+}
+</script>
+
+<script>
+  
+  theme.newVideos = function() {
+    var pdpVideo = '.videomobile';
+    $(pdpVideo)[0].play();
+  //PDP
+  var pdpVideo = '.videomobile'; 
+  if($(pdpVideo).length) {
+    $(document).on('click',pdpVideo,function(e) {
+      if($(pdpVideo)[0].paused) {
+        $(pdpVideo)[0].play();
+      } else {
+        $(pdpVideo)[0].pause();
+      }
+    });
+  }
+    
+    theme.newVideos();
+    
+</script>
+
+<style>
+  #gorgias-web-messenger-container {
+    display:none !important;
+    
+  }
+  
+  .lSSlideOuter {
+    margin-top: 120px;
+}
+  
+  .cartcontainer, span.actual-price.money, .interest-free, .mobilehidden.maxwidthdesktop {
+    display:none !important;
+  }
+    footer {
+    /* padding-top: 100px !important; */
+    padding-bottom: 130px !important;
+}
+  
+  
+  .inf-btn {
+    width: 100%;
+    height: 60px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 9999;
+    background: rgba(0,0,0,0.5);
+    display: none;
+}
+
+
+.influencer-btn {
+    width: 100%;
+    text-align: center;
+    /* border: 1px solid #ccc; */
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 0;
+    background: transparent;
+    height: 60px;
+    line-height: 18;
+    font-weight: bold;
+    font-size: 14px;
+}
+  
+  @media only screen and (max-width: 767px) {
+  
+  .fw--slider.owl-carousel.owl-theme {
+    margin-top: 20px;
+    background: transparent;
+}
+    
+    .related-collection {
+    margin-top: 15px;
+}
+    
+        footer {
+    /* padding-top: 100px !important; */
+    padding-bottom: 100px !important;
+}
+  
+    
+  }
+</style>

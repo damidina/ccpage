@@ -1,0 +1,373 @@
+{% if section.settings.desktop-image.size != blank %}
+
+  <a href="{{ section.settings.slide-link-url }}">
+    <section>
+
+      <a href="{{ section.settings.slide-link-url }}">
+        <div class="mobilehidden relativeclass">
+          <div style="margin-top: {{ section.settings.desktop-topmargin }}px; padding: 0 {{ section.settings.desktop-padding }}px;"
+            class="captiontitle {{ section.settings.slide-x-pos }} {{ section.settings.slide-y-pos }} {{ section.settings.slide-text-pos }} {{ section.settings.text-color }}">
+
+            {% if section.settings.slide-title.size > 0 %}
+            <div class="title100">
+              <h2 style="font-size:{{ section.settings.desktop-title-font }}px; width:{{ section.settings.desktop-title-width }}px;"
+                class="title {{ section.settings.font-family }} {{ section.settings.slide-x-pos }} {{ section.settings.slide-text-pos }} {{ section.settings.font-weight }} {{ section.settings.text-color }}">{{ section.settings.slide-title | escape }}
+              </h2>
+            </div>
+            {% endif %}
+
+            {% if section.settings.slide-tagline.size > 0 %}
+            <p class="sub-title">{{ section.settings.slide-tagline | escape }}</p>
+            {% endif %}
+
+           	 {% if section.settings.slide-link-title != blank %}
+                <div class="slideshow--button {{ section.settings.slide-x-pos }}" style="margin-top:{{ section.settings.desktop-spacing-button }}px; margin-left:{{ section.settings.desktop-button-left }}px;margin-right:{{ section.settings.desktop-button-right }}px;">
+                  <a style="background-color:{{ section.settings.button-background-color }}" class="button nohover image-btn" href="{{ section.settings.slide-link-url }}">
+                    {{ section.settings.slide-link-title | escape }}
+                  </a>
+                </div>
+             {% endif %}
+           </div>
+
+             <a class="nohover" href="{{ section.settings.slide-link-url }}">
+              <!-- <img src="{{ section.settings.desktop-image | img_url: '3200x' }}"/> -->
+              {% include 'framework--image-lazy' with
+                image: section.settings.desktop-image,
+                full_width: true,
+              %}
+            </a>
+        </div>
+      </a>
+    </section>
+  </a>
+
+{% endif %}
+
+<a href="{{ section.settings.slide-link-url }}">
+  <section>
+    <a href="{{ section.settings.slide-link-url }}">
+      <div class="mobileonly relativeclass">
+        <div style="margin-top: {{ section.settings.mobile-topmargin }}px; padding: 0 {{ section.settings.mobile-padding }}px;"
+          class="captiontitle {{ section.settings.slide-x-pos-mobile }} {{ section.settings.slide-y-pos-mobile }} {{ section.settings.slide-text-pos-mobile }} {{ section.settings.text-color }}">
+
+          {% if section.settings.slide-title.size > 0 %}
+          <h2 style="font-size:{{ section.settings.mobile-title-font }}px; width:{{ section.settings.mobile-title-width }}%;"
+            class="title {{ section.settings.font-family }} {{ section.settings.slide-text-pos-mobile }} {{ section.settings.text-color }} {{ section.settings.font-weight }}">{{ section.settings.slide-title | escape }}</h2>
+          {% endif %}
+
+          {% if section.settings.slide-tagline.size > 0 %}
+          <p class="sub-title">{{ section.settings.slide-tagline | escape }}</p>
+          {% endif %}
+
+          {% if section.settings.slide-link-title != blank %}
+            <div class="slideshow--button {{ section.settings.slide-text-pos-mobile }}" style="margin-top:{{ section.settings.mobile-spacing-button }}px; margin-left:{{ section.settings.mobile-button-left }}px;margin-right:{{ section.settings.mobile-button-right }}px;">
+              <a style="background-color:{{ section.settings.button-background-color }}" class="button nohover image-btn" href="{{ section.settings.slide-link-url }}">
+                {{ section.settings.slide-link-title | escape }}
+              </a>
+            </div>
+         {% endif %}
+        </div>
+
+         <a href="{{ section.settings.slide-link-url }}">
+            <!-- <img border="0" src="{{ section.settings.mobile-image | img_url: '3200x' }}"> -->
+            {% include 'framework--image-lazy' with
+                image: section.settings.mobile-image,
+                full_width: true,
+                mobile: true
+              %}
+         </a>
+      </div>
+    </a>
+  </section>
+</a>
+
+
+
+{% schema %}
+
+{
+  "name": "Full screen image",
+  "settings": [
+        {
+          "type": "header",
+          "content": "Desktop Image Settings"
+        },
+        {
+          "type": "image_picker",
+          "id": "desktop-image",
+          "label": "Desktop Image"
+        },
+        {
+          "type": "text",
+          "id": "slide-title",
+          "label": "Heading",
+          "default": "Slideshow"
+        },
+        {
+          "type": "url",
+          "id": "slide-link-url",
+          "label": "Link (applies to desktop and mobile)"
+        },
+        {
+          "type": "text",
+          "id": "slide-link-title",
+          "label": "Button label",
+          "default": "Link to content"
+        },
+        {
+          "type": "select",
+          "id": "font-weight",
+          "label": "Font weight (light, normal, bold) Only applies to Montserrat font",
+          "options": [
+            {
+              "value": "text-100",
+              "label": "100"
+            },
+            {
+              "value": "text-normal",
+              "label": "normal"
+            },
+            {
+              "value": "text-bold",
+              "label": "bold"
+            }
+          ],
+          "default": "text-100"
+        },
+        {
+          "type": "text",
+          "id": "desktop-title-font",
+          "label": "Desktop title font size",
+          "default": "50"
+        },
+        {
+          "type": "select",
+          "id": "font-family",
+          "label": "Font family (Capri sans and serif or Montserrat )",
+          "options": [
+            {
+              "value": "montserrat",
+              "label": "Montserrat"
+            },
+            {
+              "value": "capri-sans",
+              "label": "Capri Sans"
+            },
+            {
+              "value": "capri-serif",
+              "label": "Capri Serif"
+            }
+          ],
+          "default": "capri-sans"
+        },
+        {
+          "type": "text",
+          "id": "desktop-button-left",
+          "label": "Desktop button left margin",
+          "default": "10"
+        },
+        {
+          "type": "text",
+          "id": "desktop-button-right",
+          "label": "Desktop button right margin",
+          "default": "0"
+        },
+
+        {
+          "type": "text",
+          "id": "desktop-topmargin",
+          "label": "Desktop top margin (use can use negative values like -20)",
+		"info": "If you want to move the text and button up or down change this value",
+          "default": "40"
+        },
+        {
+          "type": "text",
+          "id": "desktop-title-width",
+          "label": "Desktop title width (between 250 - 500 should work)",
+          "default": "400"
+        },
+        {
+          "type": "text",
+          "id": "desktop-padding",
+          "label": "Desktop left and right padding ",
+"info": "Extra spacing on the left and right sides",
+          "default": "40"
+        },
+        {
+          "type": "text",
+          "id": "desktop-spacing-button",
+          "label": "Desktop spacing between title and button",
+          "default": "40"
+        },
+		{
+          "type": "color",
+          "id": "button-background-color",
+          "label": "Desktop background color",
+          "default": "#ffffff"
+        },
+ {
+          "type": "select",
+          "id": "slide-y-pos",
+          "label": "Vertical Desktop",
+          "options": [
+            {
+              "value": "middle",
+              "label": "Middle"
+            }
+          ],
+          "default": "middle"
+        },
+        {
+          "type": "select",
+          "id": "slide-x-pos",
+          "label": "Horizontal Desktop",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "select",
+          "id": "slide-text-pos",
+          "label": "Text alignment",
+          "options": [
+            {
+              "value": "text-left",
+              "label": "Text aligned left"
+            },
+            {
+              "value": "text-center",
+              "label": "Text aligned center"
+            },
+            {
+              "value": "text-right",
+              "label": "Text aligned right"
+            }
+          ],
+          "default": "text-left"
+        },
+        {
+          "type": "header",
+          "content":"Mobile Image Settings"
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile-image",
+          "label": "Mobile video url"
+        },
+        {
+          "type": "text",
+          "id": "mobile-title-font",
+          "label": "Mobile title font size",
+          "default": "25"
+        },
+        {
+          "type": "text",
+          "id": "mobile-button-left",
+          "label": "Mobile button left margin",
+          "default": "10"
+        },
+        {
+          "type": "text",
+          "id": "mobile-button-right",
+          "label": "Mobile button right margin",
+          "default": "0"
+        },
+        {
+          "type": "text",
+          "id": "mobile-title-width",
+          "label": "Mobile title width",
+          "default": "100"
+        },
+        {
+          "type": "text",
+          "id": "mobile-padding",
+          "label": "Mobile left padding",
+          "default": "40"
+        },
+        {
+          "type": "text",
+          "id": "mobile-spacing-button",
+          "label": "Mobile spacing between title button",
+          "default": "20"
+        },
+        {
+          "type": "text",
+          "id": "mobile-topmargin",
+          "label": "Mobile top margin (use can use negative values like -20)",
+          "default": "20"
+        },
+        {
+          "type": "select",
+          "id": "slide-x-pos-mobile",
+          "label": "Horizontal Mobile",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "left"
+        },
+
+          {
+          "type": "select",
+          "id": "slide-y-pos-mobile",
+          "label": "Vertical Mobile",
+          "options": [
+            {
+              "value": "middle",
+              "label": "Middle"
+            }
+          ],
+          "default": "middle"
+        },
+        {
+          "type": "select",
+          "id": "slide-text-pos-mobile",
+          "label": "Text alignment mobile",
+          "options": [
+            {
+              "value": "text-left",
+              "label": "Text aligned left"
+            },
+            {
+              "value": "text-center",
+              "label": "Text aligned center"
+            },
+            {
+              "value": "text-right",
+              "label": "Text aligned right"
+            }
+          ],
+          "default": "text-left"
+        }
+  ],
+
+  "presets": [
+    {
+      "name": "Full screen image",
+	  "category": "A"
+    }
+  ]
+}
+{% endschema %}

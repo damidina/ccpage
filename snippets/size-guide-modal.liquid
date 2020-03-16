@@ -1,0 +1,93 @@
+<style>
+  .custom-modal {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    background-color: transparent;
+    transition: all 300ms ease-out;
+    opacity: 0;
+    display: none;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    flex-flow: column nowrap;
+    z-index: 10030;
+    padding: 100px 20px 20px;
+  }
+  .modal__inner {
+    background-color: #fff;
+    padding: 6rem 2rem;
+    position: relative;
+    margin: auto;
+    width: 100% !important;
+    max-width: 750px!important;
+    z-index: 9002;
+  }
+  .modal__close {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .btn--close {
+    width: 4.5rem;
+    height: 4.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #979696; 
+  }
+  .btn--close .icon-close {
+    display: inline-block;
+    width: 1.5rem;
+    height: 1.5rem;
+    vertical-align: middle; 
+  }
+</style>
+<div class="custom-modal" id="sizing-guide">
+  
+  <div class="modal__inner">
+    <div class="modal__close">
+      <button type="button" class="btn--close js-modal-close">
+        <svg aria-hidden="true" focusable="false" role="presentation" class="icon-close" viewBox="0 0 14 14"><path d="M.693 1.4l11.749 11.749.707-.707L1.4.693z"/><path d="M12.442.693L.693 12.442l.707.707L13.149 1.4z"/></svg>
+      </button>
+    </div>
+
+	{% include 'sizing-table' %}
+  </div>
+  <div class="modal--mask"></div>
+  
+</div>
+
+
+<script>
+
+  $(document).ready(function() {
+    
+    const $openLink = $('.open-sizing-guide'),
+          $modal = $('#sizing-guide'),
+          $modalClose = $('#sizing-guide .modal__close'),
+          $modalMask = $('#sizing-guide .modal--mask');
+
+    
+    var openSizing = function() {
+       $modal.css('display', 'flex');
+       $modal.css('opacity', '1');
+       $modalMask.css('display', 'block');
+    };
+    
+    var closeSizing = function() {
+       $modal.css('opacity', '0');
+       $modal.css('display', 'none');
+       $modalMask.css('display', 'none');
+    };
+    
+    $openLink.on( 'click', function(e) {
+      e.preventDefault;
+      openSizing();
+    });
+    $modalClose.click(closeSizing);
+        
+  });
+  
+</script>

@@ -1,0 +1,34 @@
+{% comment %} If there are some variants available i.e. not all are sold out {% endcomment %}
+
+  <div class="product-unavailable spacing--3x font--size-1 show-after-js">
+    {% if product.variants.size > 1  %}
+    {% if product.metafields.coming.soon %}
+      <span class="sold-out font--accent">Coming soon</span>
+    {% endif %}
+      {% else %}
+      {% if product.available %}<p class="error">{{ 'products.sold_out.variant' | t }}</p>
+    <a href="#" class="button--secondary get-notified show--large" style="">Get Notified</a>
+    {% endif %}
+    {% endif %}
+  </div>
+
+
+<script>
+  jQuery(function($) {
+    $(document).ready(function() {
+      $('.get-notified').click(function(e) {
+         e.preventDefault();
+        $('#esc-oos-form').css('left', '40px');
+        $('#esc-oos-form').css('right', '-40px');
+        $('.close-form').css('right', '-40px');
+      });
+      $('.close-form').click(function(e) {
+        $('#esc-oos-form').css('left', '1000px');
+        $('#esc-oos-form').css('right', '-1000px');
+        $('.close-form').css('right', '-400px');
+      });     
+      
+    });
+  });
+</script>
+
